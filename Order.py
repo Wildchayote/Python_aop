@@ -79,7 +79,7 @@ SA: Say again \n
             print()
             if printer in [2,3]:
                 self.stage_numb=stage_numb=self.stage_numb
-                select_printer=input(str(printer)+'? LWC '+str(printer)+'? correct? ')
+                select_printer=input(str(printer)+'? TIMELESS '+str(printer)+'? correct? ')
                 if select_printer=='yes' and self.self_collect == 'no':
                     print('Deliver to stage 0'+str(stage_numb)+ '\n')
                     InventorySys.stage(self)
@@ -93,9 +93,9 @@ SA: Say again \n
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             else:
                 while True:
-                    select_printer = input(str(printer)+'? LWC '+str(printer)+'? correct? ')
+                    select_printer = input(str(printer)+'? TIMELESS '+str(printer)+'? correct? ')
                     if select_printer=='yes':
-                        print(' >>\t LWC '+str(printer)+' not found. Try again!')
+                        print(' >>\t TIMELESS '+str(printer)+' not found. Try again!')
                     elif select_printer=='no':
                         InventorySys.printer(self)
                     else: 
@@ -144,12 +144,40 @@ SA: Say again \n
         
 class Stack:
     def Aisle(self):
-        self.prod = {'BI11':'Aisle AA','CO22':'Aisle AA','MA11':'Aisle AA','AB40':'Aisle BE A-03 7683 79 01',
-                                'SM37':'Aisle BD A-01 1118 47 01','PE00': 'Aisle BL A-02 9785 50 12'}
+        #test data
+        self.prod = {'CA11':'Aisle AA',     'CA22':'Aisle AA',
+                    'FO11':'Aisle AA',      'FO22':'Aisle AA',
+                    'BI11':'Aisle AA',      'BI22':'Aisle AB',
+                    'CO11':'Aisle AA',      'CO22':'Aisle AA',
+                    'JS11':'Aisle AA',      'JS22':'Aisle AA',
+
+                    'MA11':'Aisle AA',      'GS11':'Aisle AA',
+                    'SA11':'Aisle AA',      'TS11':'Aisle AA',
+                    'TB09':'Aisle AA',      'PN11':'Aisle AA',
+                    
+                    'AB75': 'Aisle BE A-03 7683 79 01',
+                    'SM75': 'Aisle BD A-01 1118 47 01',
+                    'PE7L': 'Aisle BL A-02 9785 50 12',
+                    'DP30': 'Aisle BA A-02 0530 04 02',
+                    'CE35': 'Aisle BA A-03 3248 90 03',
+                    'FG1L': 'Aisle BB A-16 3005 86 10'}
         
-        self.desc = {'PE00': 'Pepsi Cola | 7ltr Big','BI11':'Birra Moretti (BI11) | 22 gal keg, 63.5kg',
-                                'CO22':'Coors Lite (CO22) | 22 gal keg, 100kg','MA11':'Madri Lager (MA11) | 11 gal, 63.5kg',
-                                'AB40':'Absolut Vodka (AB40) | 40% alc, 75cl','SM37':'Smirnoff Vodka (SM37) | 38% alc, 75cl'}
+        self.desc = {'CA11':'Carling (CA11) | 11 gal keg, 63.5kg',      'CA22':'Carling (CA22) | 22 gal keg, 100kg',
+                    'FO11':'Fosters (FO11) | 11 gal keg, 63.5kg',       'FO22':'Fosters (FO22) | 22 gal keg, 100kg',
+                    'BI11':'Birra Moretti (BI11) | 11 gal keg, 63.5kg', 'BI22':'Birra Moretti (BI22) | 22 gal keg, 100kg',
+                    'CO11':'Coors Lite (CO11) | 11 gal keg, 63.5kg',    'CO22':'Coors Lite (CO22) | 22 gal keg, 100kg',
+                    'JS11':'John Smiths (JS11) | 11 gal keg, 63.5kg',   'JS22':'John Smiths (JS22) | 22 gal keg, 100kg',
+                    'MA11':'Madri Lager (MA11) | 11 gal, 63.5kg',       'GS11':'Guiness Stouts (GS11) | 11 gal keg, 63.5kg',
+                    'SA11':'Stella Attoires (SA11) | 11 gal, 63.5kg',   'TS11':'Trophy Special (TS11) | 11 gal keg, 63.5kg',
+                    'TB09':'Theakson Bitters (TB09) | 09 gal keg, 40kg',
+
+                    'AB75':'Absolut Vodka (AB40) | 40% alc, 75cl',
+                    'SM75':'Smirnoff Vodka (SM37) | 38% alc, 75cl',
+                    'PE7L': 'Pepsi Cola | 7ltr Big',
+                    
+                    'DP30':'Desperados Tequila Beer (DP04) | 4% alc, 300ml, x24',
+                    'CE35':'Corona Extra Cider (CE35) | 4.5% alc, 350ml, x24',
+                    'FG1L': 'Famous Grouse Vodka | 40.5% alc, 1.5ltr , x6'}
         
         self.prod=prod=self.prod
         self.item_value=[1,2,3,4,5,6,7,8,9,10]
@@ -175,7 +203,7 @@ class Stack:
                 
                 self.uprod = uprod = prod[i]
                 self.uprod = uprod[0:8]
-                if self.uprod == 'Aisle AA':                                                        #   Kegs
+                if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #   Kegs
                     self.prod= self.uprod
                     self.status = status = input(self.uprod+': ')
                     while True:
