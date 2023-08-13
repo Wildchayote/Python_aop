@@ -6,7 +6,7 @@ def escape():
 print()
 user=input("[prompt:]  Enter username: ")
 print()
-
+# This program that returns the captital of a nation when you supply thr nation
 world_atlas = {"nigeria": "ABUJA", "togo": "LOME", "uk": "LONDON","scotland": "EDINBURG","wales": "CARDIFF","germany": "BERLIN",
                 "benin": "PORT-NOVO","ghana": "ACCRA","cote d'ivoire": "YAMOUSSOUKRO","mali": "BAMAKO","niger": "NIAMEY","chad": 
                 "N'JAMENA","burkina faso": "OAGADOUGOU","senegal": "DAKAR","liberia": "MONROVIA","sierra leone": "FREETOWN","gabon": 
