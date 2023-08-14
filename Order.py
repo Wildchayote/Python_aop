@@ -181,15 +181,15 @@ class Stack:
         self.item_value=choice(self.item_value)
         self.itemm_value = copy.copy(self.item_value)
         
-        self.num = num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-        num=choice(num)
-        num=copy.copy(num)
+        #self.num = num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        #num=choice(num)
+        #num=copy.copy(num)
 
         self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
         self.Stage_numb=choice(Stage_num)
 
         while True:
-            for i in self.stacklist:
+            for i in self.stacklist[0:4]:
                 try:
                     assert i in self.prod
                 except AssertionError:
@@ -255,11 +255,12 @@ class Stack:
                     InventorySys.Queuing(self)
 
     def Kegs(self):
-        print('Pick '+str(self.itemm_value)+' each. '+str(self.Item_description[self.knockoff]) )
+        print('Pick '+str(self.stacklist[5:])+' each. '+str(self.Item_description[self.knockoff]) )
         while True:
-            self.itemm_value = copy.copy(self.itemm_value)
+            self.stacklist = self.stacklist[5:]
+            self.stacklist = copy.copy(self.stacklist)
             self.say_qty=int(input('Quantity? '))
-            if self.say_qty == self.itemm_value:
+            if self.say_qty == self.stacklist:
                 Stack.Keg_repeater(self)
 
             elif self.say_qty == 'deliver now.c' or self.say_qty == 'DN.c':
