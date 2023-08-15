@@ -2,9 +2,7 @@ from random import choice
 from datetime import datetime
 import copy
 
-
 class InventorySys:
-    
     def Command(self):
         self.Command = Command = input('Talkman: say (help.c, RLP.c, DN.c, HMM.c): ')
         if Command == 'help.c':
@@ -149,11 +147,12 @@ class Stack:
                     'BI11':'Aisle AA',  'BI22':'Aisle AB',
                     'CO11':'Aisle AA',  'CO22':'Aisle AA',
                     'JS11':'Aisle AA',  'JS22':'Aisle AA',
+                    'AB75': 'Aisle BE A-03 7683 79 01',
                     'MA11':'Aisle AA',  'GS11':'Aisle AA',
                     'SA11':'Aisle AA',  'TS11':'Aisle AA',
                     'TB09':'Aisle AA',  'PN11':'Aisle AA',
                     
-                    'AB75': 'Aisle BE A-03 7683 79 01',
+                    
                     'SM75': 'Aisle BD A-01 1118 47 01',
                     'PE7L': 'Aisle BL A-02 9785 50 12',
                     'DP30': 'Aisle BA A-02 0530 04 02',
@@ -177,19 +176,27 @@ class Stack:
                     'FG1L': 'Famous Grouse Vodka | 40.5% alc, 1.5ltr , x6'}
         
         self.prod=prod=self.prod
-        self.item_value=[1,2,3,4,5,6,7,8,9,10]
-        self.item_value=choice(self.item_value)
+        self.item_value = [1,2,3,4,5,6,7,8,9,10]
+        self.item_value = choice(self.item_value)
         self.itemm_value = copy.copy(self.item_value)
         
-        #self.num = num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-        #num=choice(num)
-        #num=copy.copy(num)
+        self.num = num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        num = choice(num)
+        num = copy.copy(num)
 
         self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-        self.Stage_numb=choice(Stage_num)
+        self.Stage_numb = choice(Stage_num)
+        self.trai = []
+        for i in self.stacklist:
+            self.demo = i[0:4]
+            self.trai.append(self.demo)
+        print(self.trai)
+
+
 
         while True:
-            for i in self.stacklist[0:4]:
+            print(self.demo)
+            for i in self.trai:
                 try:
                     assert i in self.prod
                 except AssertionError:
@@ -255,14 +262,13 @@ class Stack:
                     InventorySys.Queuing(self)
 
     def Kegs(self):
-        for aisle in self.uprod:
-            if aisle != self.knockoff:
-                continue
-            else:
-                print('Pick '+str(self.stacklist[5:])+' each. '+str(self.Item_description[self.knockoff]) )
+        self.stacklist = copy.deepcopy(self.stacklist)
+        self.stacklist = self.stacklist[5:]
+        print('Pick '+str(self.stacklist)+' each. '+str(self.Item_description[self.knockoff]) )
+                
         while True:
-            self.stacklist = self.stacklist[5:]
-            self.stacklist = copy.copy(self.stacklist)
+            #self.stacklist = self.stacklist[5:]
+            #self.stacklist = copy.copy(self.stacklist)
             self.say_qty=int(input('Quantity? '))
             if self.say_qty == self.stacklist:
                 Stack.Keg_repeater(self)
@@ -291,23 +297,24 @@ class Stack:
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
     
     def Bottles(self):
-        print('Pick '+str(self.itemm_value)+' each. '+str(self.Item_description[self.knockoff]) )
+        self.knockoff0 = self.knockoff[0:4]
+        print('Pick '+str(self.knockoff[5:])+' each. '+str(self.Item_description[self.knockoff0]) )
         while True:
-            self.itemm_value = copy.copy(self.itemm_value)
+            #self.itemm_value = copy.copy(self.itemm_value)
             self.say_qty = int(input('Quantity? '))
-            if self.say_qty == self.itemm_value:
+            if self.say_qty == int(self.knockoff[5:]):
                 Stack.Bottle_ID(self) 
             
             elif self.say_qty == 'deliver now.c' or self.say_qty == 'DN.c':
                 InventorySys.DN(self)
 
-            elif self.say_qty > self.itemm_value:
+            elif self.say_qty > int(self.knockoff[5:]):
                 print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
-                                                 str(self.itemm_value), str(self.itemm_value), str(self.Item_description[self.knockoff]))
+                                                 str(self.knockoff[5:]), str(self.knockoff[5:]), str(self.Item_description[self.knockoff0]))
                 print(print_err)
                 print()
             else:
-                self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I only asked for '+str(self.itemm_value)+
+                self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I only asked for '+str(self.knockoff[5:])+
                                                  '.\n \t Is this a short product? ')
                 print()
                 if short_prod=='yes':
@@ -335,13 +342,13 @@ class Stack:
     def Bottle_ID(self):
         while True:
             self.item_barcode = item_barcode = copy.deepcopy(self.prod)
-            self.item_barcode = (item_barcode[self.knockoff])[14:18]
+            self.item_barcode = (item_barcode[self.knockoff0])[14:18]
             self.item_no = item_no = input('Item number | '+self.item_barcode+ ': ')
             self.confirm_item_no = input(str(item_no)+ ' corect? ')
             print()
             
             if self.confirm_item_no == 'yes' and item_no == self.item_barcode:
-                print('Order picked: '+str(self.say_qty)+' ['+str(self.knockoff)+'] '+'\nOrder on queue: '+str(self.newstacklist)+'\n')
+                print('Order picked: '+str(self.say_qty)+' ['+str(self.knockoff0)+'] '+'\nOrder on queue: '+str(self.newstacklist[0:4])+'\n')
                 self.prodd = copy.copy(self.prod)
                 if len(self.newstacklist)>0:
                     print()
