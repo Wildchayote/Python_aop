@@ -255,7 +255,11 @@ class Stack:
                     InventorySys.Queuing(self)
 
     def Kegs(self):
-        print('Pick '+str(self.stacklist[5:])+' each. '+str(self.Item_description[self.knockoff]) )
+        for aisle in self.uprod:
+            if aisle != self.knockoff:
+                continue
+            else:
+                print('Pick '+str(self.stacklist[5:])+' each. '+str(self.Item_description[self.knockoff]) )
         while True:
             self.stacklist = self.stacklist[5:]
             self.stacklist = copy.copy(self.stacklist)
