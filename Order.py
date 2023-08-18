@@ -13,13 +13,12 @@ class Stack:
                     'BI11':'Aisle AA',  'BI22':'Aisle AB',
                     'CO11':'Aisle AA',  'CO22':'Aisle AA',
                     'JS11':'Aisle AA',  'JS22':'Aisle AA',
-                    'AB75': 'Aisle BE A-03 7683 79 01',
                     'MA11':'Aisle AA',  'GS11':'Aisle AA',
                     'SA11':'Aisle AA',  'TS11':'Aisle AA',
                     'TB09':'Aisle AA',  'PN11':'Aisle AA',
                     
-                    
-                    'SM75': 'Aisle BD A-01 1118 47 01',
+                    'AB75': 'Aisle BE A-03 7683 79 01',
+                    'SM75': 'Aisle BE A-01 1118 47 01',
                     'PE7L': 'Aisle BL A-02 9785 50 12',
                     'DP30': 'Aisle BA A-02 0530 04 02',
                     'CE35': 'Aisle BA A-03 3248 90 03',
@@ -57,9 +56,8 @@ class Stack:
         for i in self.stacklist:
             self.demo = i[0:4]
             self.trai.append(self.demo)
-        print(self.trai)
 
-
+        self.test = []            
 
         while True:
             for i in self.trai:
@@ -73,75 +71,85 @@ class Stack:
                 
                 self.uprod = uprod = prod[i]
                 self.uprod = uprod[0:8]
-                if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #   Kegs
-                    self.prod= self.uprod
-                    self.status = status = input(self.uprod+': ')
-                   
-                    while True:
-                    
-                        self.prodd = prodd = copy.copy(self.uprod)
-                        if status == 'ready':
+                self.test.append(self.uprod)
+                print(self.test)
+                print('STOP')
+                
+                self.first_item = self.test[0]
+                print(self.first_item)
+
+                for self.uprod in self.test:
+                    if self.uprod != self.first_item:
+                        continue
+                    else:
+                        if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #   Kegs
+                            #self.prod = self.uprod
+                            self.status = status = input(self.uprod+': ')
                             while True:
-                                self.say_num = say_num = int(input('0'+str(num)+': '))
-                                if say_num == num:
-                                    print()
-                                    self.knockoff = Stack.pop(self)
-                                    self.newstacklist = copy.copy(self.stacklist)
-                                    Stack.Kegs(self)
-                                else:
-                                    print(' >>\t Wrong check digit '+str(say_num)+'. Try again!')
-                        elif status == 'how much more.c' or status == 'HMM.c':
-                            InventorySys.HMM(self)
-                            print()
-                            self.status=status=input(prodd+': ')
-
-                        elif status == 'aisle summary':
-                            Stack.Aisle_summary(self)
-                            self.status=status=input(self.prodd+': ')
-
-                        elif status == 'RLP.c':
-                            InventorySys.RLP(self)
-
-                        else: 
-                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                            self.status=status=input(prodd+': ')
                             
-                elif self.uprod != 'Aisle AA':                                                               #  Bottles
-                    self.status = status = input(self.uprod+': ')
-                    while True:
-
-                        self.prodd = prodd = copy.copy(self.uprod)
-                        if status == 'ready':
-                            while True:
-                                self.seg = uprod[22:]
-                                self.say_num = say_num = input(str(self.seg)+' | '+str(uprod[9:13])+': '+uprod[19:21]+': ')
-                                self.seg = uprod[19:21]
-                                if say_num == str(self.seg):
+                                self.prodd = prodd = copy.copy(self.uprod)
+                                if status == 'ready':
+                                    while True:
+                                        self.say_num = say_num = int(input('0'+str(num)+': '))
+                                        if say_num == num:
+                                            print()
+                                            self.knockoff = Stack.pop(self)
+                                            self.newstacklist = copy.copy(self.stacklist)
+                                            Stack.Kegs(self)
+                                        else:
+                                            print(' >>\t Wrong check digit '+str(say_num)+'. Try again!')
+                                elif status == 'how much more.c' or status == 'HMM.c':
+                                    InventorySys.HMM(self)
                                     print()
-                                    self.knockoff = Stack.pop(self)
-                                    self.newstacklist  = copy.copy(self.stacklist)
-                                    Stack.Bottles(self)
-                                else:
-                                    print(' >>\t Wrong check digit. Try again! ')
+                                    self.status=status=input(prodd+': ')
 
-                        elif status == 'how much more.c' or status == 'HMM.c':
-                            InventorySys.HMM(self)
-                            print()
-                            self.status = status = input(prodd+': ')
+                                elif status == 'aisle summary':
+                                    Stack.Aisle_summary(self)
+                                    self.status=status=input(self.prodd+': ')
 
-                        elif status == 'aisle summary':
-                            Stack.Aisle_summary(self)
-                            self.status=status=input(self.prodd+': ')
+                                elif status == 'RLP.c':
+                                    InventorySys.RLP(self)
 
-                        elif status == 'RLP.c':
-                            InventorySys.RLP(self)
+                                else: 
+                                    print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+                                    self.status=status=input(prodd+': ')
+                                    
+                        elif self.uprod != 'Aisle AA':                                                               #  Bottles
+                            self.status = status = input(self.uprod+': ')
+                            while True:
 
+                                self.prodd = prodd = copy.copy(self.uprod)
+                                if status == 'ready':
+                                    while True:
+                                        self.seg = uprod[22:]
+                                        self.say_num = say_num = input(str(self.seg)+' | '+str(uprod[9:13])+': '+uprod[19:21]+': ')
+                                        self.seg = uprod[19:21]
+                                        if say_num == str(self.seg):
+                                            print()
+                                            self.knockoff = Stack.pop(self)
+                                            self.newstacklist  = copy.copy(self.stacklist)
+                                            Stack.Bottles(self)
+                                        else:
+                                            print(' >>\t Wrong check digit. Try again! ')
+
+                                elif status == 'how much more.c' or status == 'HMM.c':
+                                    InventorySys.HMM(self)
+                                    print()
+                                    self.status = status = input(prodd+': ')
+
+                                elif status == 'aisle summary':
+                                    Stack.Aisle_summary(self)
+                                    self.status=status=input(self.prodd+': ')
+
+                                elif status == 'RLP.c':
+                                    InventorySys.RLP(self)
+
+                                else: 
+                                    print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+                                    self.status=status=input(prodd+': ')                                                                  
                         else: 
-                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                            self.status=status=input(prodd+': ')                                                                  
-                else: 
-                    print(' >>\t Data not found. Try again!')
-                    InventorySys.Queuing(self)
+                            print(' >>\t Data not found. Try again!')
+                            InventorySys.Queuing(self)
 
     def Kegs(self):
         self.knockoff0 = self.knockoff[0:4]
@@ -213,17 +221,13 @@ class Stack:
         print()
         print('Order picked: '+str(self.say_qty)+' ['+str(self.knockoff0)+'] ' +'\nOrder on queue: '+str(self.newstacklist)+'\n')
         self.prodd = copy.copy(self.prod)
-        while True:
-            if self.uprod != self.uprod:
-                continue
-            else:
-                pass
-
-            if len(self.newstacklist)>0:
-                print()
-                Stack.Aisle(self)
-            else: 
-                InventorySys.Printer(self) 
+        
+        if len(self.newstacklist)>0:
+            print()
+            Stack.Aisle(self)
+            
+        else: 
+            InventorySys.Printer(self) 
 
     def Bottle_ID(self):
         while True:
@@ -236,11 +240,13 @@ class Stack:
             if self.confirm_item_no == 'yes' and item_no == self.item_barcode:
                 print('Order picked: '+str(self.say_qty)+' ['+str(self.knockoff0)+'] '+'\nOrder on queue: '+str(self.newstacklist)+'\n')
                 self.prodd = copy.copy(self.prod)
+
                 if len(self.newstacklist)>0:
                     print()
                     Stack.Aisle(self)
                 else:
                     InventorySys.Printer(self)
+
             elif self.confirm_item_no == 'yes' and item_no != self.item_barcode:
                 print('Invalid '+ item_no+'. Try again!\n')
             else:
