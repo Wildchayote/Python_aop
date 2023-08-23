@@ -37,3 +37,32 @@ for i in prod:
         long.append(new_list)
 print()
 print(long)
+
+
+
+
+"""key = ['CA11','FG1L', 'CA22','CO11', 'FO11', 'CE35', 'FO22', 'BI11', 'BI22','AB75']
+value = ['Aisle AA-05','Aisle BE-79','Aisle AA-07','Aisle AA-11', 'Aisle AA-06', 'Aisle BB-86', 'Aisle BA-90','Aisle AA-01']
+
+order = []
+for i in prod:
+    if i in key:
+        new_list = list(map(lambda s: i, value))
+        new_list = (new_list[0])[0:8]
+        order.append(new_list)
+print()
+print('Key: ',order)
+
+order_val = []
+for i in prod:
+    if prod[i] in value:
+        new_list = list(map(lambda s: prod[i], key))
+        new_list = (new_list[0])[0:]
+        order_val.append(new_list)
+print('Value: ',order_val)
+
+res = dict(zip(order, order_val))
+print('\nOrder Dictionary: ',str(res))"""
+
+
+
