@@ -8,14 +8,14 @@ import copy
 class Stack:
 
     def Aisle(self):
-        self.prod = {'CA11':'Aisle AA-07',  'CA22':'Aisle AA-11',
-                    'FO11':'Aisle AA-01',   'FO22':'Aisle AA-06',
-                    'BI11':'Aisle AA-15',   'BI22':'Aisle AB-32',
-                    'CO11':'Aisle AA-05',   'CO22':'Aisle AA-02',
-                    'JS11':'Aisle AA-12',   'JS22':'Aisle AA-08', 
-                    'MA11':'Aisle AA-09',   'GS11':'Aisle AA-10',
-                    'SA11':'Aisle AA-13',   'TS11':'Aisle AA-14',
-                    'TB09':'Aisle AA-16',   'PN11':'Aisle AA-04',
+        self.prod = {'CA11': 'Aisle AA-07',  'CA22': 'Aisle AA-11',
+                    'FO11': 'Aisle AA-01',   'FO22': 'Aisle AA-06',
+                    'BI11': 'Aisle AA-15',   'BI22': 'Aisle AB-32',
+                    'CO11': 'Aisle AA-05',   'CO22': 'Aisle AA-02',
+                    'JS11': 'Aisle AA-12',   'JS22': 'Aisle AA-08', 
+                    'MA11': 'Aisle AA-09',   'GD11': 'Aisle AA-10',
+                    'SA11': 'Aisle AA-13',   'TS11': 'Aisle AA-14',
+                    'TB09': 'Aisle AA-16',   'PN11': 'Aisle AA-04',
                     
                     'AB75': 'Aisle BE-79 A-03 7683 01',
                     'SM75': 'Aisle BE-47 A-01 1118 01',
@@ -24,26 +24,25 @@ class Stack:
                     'CE35': 'Aisle BA-90 A-03 3248 03',
                     'FG1L': 'Aisle BB-86 A-16 3005 10'}
         
-        self.Item_description = {'CA11':'Carling (CA11) | 11 gal keg, 63.05kg',  'CA22':'Carling (CA22) | 22 gal keg, 100kg',
-                    'FO11':'Fosters (FO11) | 11 gal keg, 63.05kg',       'FO22':'Fosters (FO22) | 22 gal keg, 100kg',
-                    'BI11':'Birra Moretti (BI11) | 11 gal keg, 63.05kg', 'BI22':'Birra Moretti (BI22) | 22 gal keg, 100kg',
-                    'CO11':'Coors Lite (CO11) | 11 gal keg, 63.05kg',    'CO22':'Coors Lite (CO22) | 22 gal keg, 100kg',
-                    'JS11':'John Smiths (JS11) | 11 gal keg, 63.05kg',   'JS22':'John Smiths (JS22) | 22 gal keg, 100kg',
-                    'MA11':'Madri Lager (MA11) | 11 gal, 63.05kg',       'GS11':'Guiness Stouts (GS11) | 11 gal keg, 63.05kg',
-                    'SA11':'Stella Attoires (SA11) | 11 gal, 63.05kg',   'TS11':'Trophy Special (TS11) | 11 gal keg, 63.05kg',
-                    'TB09':'Theakson Bitters (TB09) | 09 gal keg, 40kg',
+        self.Item_description = {'CA11': 'Carling (CA11) | 11 gal keg, 63.05kg',  'CA22':'Carling (CA22) | 22 gal keg, 100kg',
+                    'FO11': 'Fosters (FO11) | 11 gal keg, 63.05kg',       'FO22':'Fosters (FO22) | 22 gal keg, 100kg',
+                    'BI11': 'Birra Moretti (BI11) | 11 gal keg, 63.05kg', 'BI22':'Birra Moretti (BI22) | 22 gal keg, 100kg',
+                    'CO11': 'Coors Lite (CO11) | 11 gal keg, 63.05kg',    'CO22':'Coors Lite (CO22) | 22 gal keg, 100kg',
+                    'JS11': 'John Smiths (JS11) | 11 gal keg, 63.05kg',   'JS22':'John Smiths (JS22) | 22 gal keg, 100kg',
+                    'MA11': 'Madri Lager (MA11) | 11 gal, 63.05kg',       'GS11':'Guiness Draughts (GS11) | 11 gal keg, 63.05kg',
+                    'SA11': 'Stella Attoires (SA11) | 11 gal, 63.05kg',   'TS11':'Trophy Special (TS11) | 11 gal keg, 63.05kg',
+                    'TB09': 'Theakson Bitters (TB09) | 09 gal keg, 40kg',
 
-                    'AB75':'Absolut Vodka (AB40) | 40% alc, 6x75cl',
-                    'SM75':'Smirnoff Vodka (SM37) | 38% alc, 6x75cl',
+                    'AB75': 'Absolut Vodka (AB40) | 40% alc, 6x75cl',
+                    'SM75': 'Smirnoff Vodka (SM37) | 38% alc, 6x75cl',
                     'PE7L': 'Pepsi Cola | 7ltr Bib',
-                    'DP30':'Desperados Tequila Beer (DP04) | 4% alc, 300ml, 24x330ml',
-                    'CE35':'Corona Extra Cider (CE35) | 4.5% alc, 350ml, 24x350ml',
-                    'FG1L': 'Famous Grouse Vodka | 40.5% alc, 1.5ltr , 6x1.5lt'}
+                    'DP30': 'Desperados Tequila Beer (DP04) | 4% alc, 300ml, 24x330ml',
+                    'CE35': 'Corona Extra Cider (CE35) | 4.5% alc, 350ml, 24x350ml',
+                    'FG1L': 'Famous Grouse Whisky | 40.5% alc, 1.5ltr , 6x1.5lt'}
 
         self.prod = prod = self.prod
         self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
         self.Stage_numb = choice(Stage_num)
-
 
 
         key = []
@@ -68,17 +67,15 @@ class Stack:
                 new_list = list(map(lambda s: j, sorted(value)))
                 new_list0 = (new_list[0])[0:8]
                 self.order_list0.append(new_list0)
-        print(self.order_list0)
 
         try:
             self.order_list0 = order_list0 = copy.copy(self.newstacklist)
         except AttributeError:
             self.order_list0 = order_list0 = copy.copy(self.order_list0)
-            print('Adeola')
             pass
         else:
-            print('Bashir')
             pass
+
         while True: 
                 for i in order_list0:
                     try:
@@ -91,9 +88,11 @@ class Stack:
                     
                     self.uprod = uprod = self.prod[i]
                     self.uprod = uprod[0:8]
-                    if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #   Kegs
+
+                    if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #Kegs
                         self.prod= self.uprod
                         self.status = status = input(self.uprod+': ')
+
                         while True:
                             self.prodd = prodd = copy.copy(self.uprod)
                             if status == 'ready':
@@ -139,7 +138,6 @@ class Stack:
                                     if say_num == str(self.check_digit):
                                         print()
                                         self.knockoff = Stack.pop(self)
-                                        
                                         self.newstacklist  = copy.copy(self.order_list0)
                                         Stack.Bottles(self)
                                     else:
@@ -163,7 +161,6 @@ class Stack:
                     else: 
                         print(' >>\t Data not found. Try again!')
                         InventorySys.Queuing(self)
-
 
 
     def Kegs(self):
@@ -277,15 +274,12 @@ class Stack:
         del self.order_list0[0]
         return order
     
+
     def Aisle_summary(self):
         j = [eval(i[5:]) for i in self.stacklist]
         items = sum(j)
         print()
         print(str(items)+ ' items in '+ str(len(self.stacklist))+ ' locations.')
-
-
-
-
 
 
 
