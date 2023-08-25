@@ -1,6 +1,7 @@
 from random import choice
 from datetime import datetime
 import copy
+import math
 
 
 
@@ -30,10 +31,16 @@ SA: Say again \n
     
     def HMM(self):
 
-        j = [eval(self.order_dict[i]) for i in self.order_dict]
+        j = [self.order_dict[i] for i in self.order_list0]
         items = sum(j)
+
         print()
-        print('>>\t'+str(items)+ ' items in '+ str(len(self.order_dict))+ ' locations.')
+        if items>1 and len(self.order_list0) > 1:
+            print('>>\t'+str(items)+ ' items in '+ str(len(self.order_list0))+ ' locations.')
+        elif items>1 and len(self.order_list0) ==1:
+            print('>>\t'+str(items)+ ' items in '+ str(len(self.order_list0))+ ' location.')
+        else:
+            print('>>\t'+str(items)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
     def DN(self):
         deliver = input('Deliver now? ')
@@ -127,7 +134,32 @@ SA: Say again \n
         self.self_collect = self_collect = input('Self Collect? ')
         print()
         self.stacklist = self.stacklist.split()
-              
+        
+        self.key = key = []
+        self.quanti = quanti = []
+        for i in self.stacklist:
+            demo = i[0:4]
+            quan = i[5:]
+
+            try:
+                quan = math.floor(float(quan))
+            except ValueError:
+                print('Quantity must be whole number > zero. Try again!')
+                InventorySys.Queuing(self)
+
+            key.append(demo)
+            quanti.append(quan)
+        self.order_dict = dict(zip(key, quanti))
+
+        for i in quanti:
+            try:
+                if i>0:
+                    pass
+                else:
+                    raise Exception
+            except Exception:
+                print('Quantity must be > zero. Try again!')
+                InventorySys.Queuing(self)
 
         try:
             assert self.self_collect in ['yes', 'no']
@@ -155,14 +187,14 @@ class Stack:
 
     def Aisle(self):
         self.prod ={'CA11': 'Aisle AA-07 Carling (CA11) | 11 gal keg, 63.05kg',         'CA22': 'Aisle AA-11 Carling (CA22) | 22 gal keg, 100kg',    
-                    'FO11': 'Aisle AA-01 Fosters (FO11) | 11 gal keg, 63.05kg',         'FO22': 'Aisle AA-06 Fosters (FO22) | 22 gal keg, 100kg',    
-                    'BI11': 'Aisle AA-15 Birra Moretti (BI11) | 11 gal keg, 63.05kg',   'BI22': 'Aisle AB-32 Birra Moretti (BI22) | 22 gal keg, 100kg',    
+                    'FO11': 'Aisle AA-01 Fosters (FO11) | 11 gal keg, 63.05kg',         'FO22': 'Aisle AA-06 Fosters (FO22) | 22 gal keg, 100kg',      
                     'CO11': 'Aisle AA-05 Coors Lite (CO11) | 11 gal keg, 63.05kg',      'CO22': 'Aisle AA-02 Coors Lite (CO22) | 22 gal keg, 100kg',    
                     'JS11': 'Aisle AA-12 John Smiths (JS11) | 11 gal keg, 63.05kg',     'JS22': 'Aisle AA-08 John Smiths (JS22) | 22 gal keg, 100kg',    
                     'MA11': 'Aisle AA-09 Madri Lager (MA11) | 11 gal, 63.05kg',         'GD11': 'Aisle AA-10 Guiness Draughts (GS11) | 11 gal keg, 63.05kg',
                     'SA11': 'Aisle AA-13 Stella Attoires (SA11) | 10.5 gal, 55.05kg',   'TS11': 'Aisle AA-14 Trophy Special (TS11) | 11 gal keg, 63.05kg',
                     'TB09': 'Aisle AA-16 Theakson Bitters (TB09) | 09 gal keg, 40kg',   'PN11': 'Aisle AA-04 Peroni Special Lager (PN11) | 11 gal keg, 63.05kg',
-                    
+                    'BI11': 'Aisle AA-15 Birra Moretti (BI11) | 11 gal keg, 63.05kg',
+
                     'AB75': 'Aisle BE-79 A-03 7683 01 Absolut Vodka (AB40) | 40% alc, 6x75cl', 
                     'SM75': 'Aisle BE-47 A-01 1118 01 Smirnoff Vodka (SM37) | 38% alc, 6x75cl', 
                     'PE7L': 'Aisle BL-50 A-02 9785 12 Britvic Pepsi Cola Max | 7lt Bib', 
@@ -173,24 +205,16 @@ class Stack:
         self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
         self.Stage_numb = choice(Stage_num)
 
-        self.key = key = []
-        self.quanti = quanti = []
-        for i in self.stacklist:
-            demo = i[0:4]
-            quan = i[5:]
-            key.append(demo)
-            quanti.append(quan)
-        self.order_dict = dict(zip(key, quanti))
 
         self.value = value = []
         for i in self.prod:
-            if i in key:
+            if i in self.key:
                 demo0 = (self.prod[i])[0:11]
                 value.append(demo0)
 
         self.order_list0 = []
         for j in self.prod:
-            if j in key:
+            if j in self.key:
                 new_list = list(map(lambda s: j, sorted(value)))
                 new_list0 = (new_list[0])[0:8]
                 self.order_list0.append(new_list0)
@@ -214,7 +238,6 @@ class Stack:
                     pass
                 self.uprod = uprod = self.prod[i]
                 self.uprod = uprod[0:8]
-
 
                 try:
                     self.knockoff_val = (self.prod[self.knockoff])[0:8] 
@@ -401,7 +424,7 @@ class Stack:
     def verify_keg(self):
         for i in self.order_list0:
                 
-            self.uprod = uprod = self.prod[i]
+            self.uprod = self.prod[i]
             self.aisle_num = self.uprod[9:11]
             self.say_num = say_num = input((self.aisle_num)+': ')
             if say_num == self.aisle_num:
@@ -433,11 +456,13 @@ class Stack:
     def Aisle_summary(self):
         try:
             aisle = self.knockoff_val
+            if aisle == self.knockoff_val:
+                raise AttributeError
+            else:
+                pass
         except AttributeError:
             self.uprod = uprod = self.uprod
             aisle = uprod
-        else:
-            pass
 
         counter = 0
         new_value = []
@@ -456,9 +481,13 @@ class Stack:
 
         j = [eval(self.order_dict[i]) for i in final]
         items = sum(j)
+        final.clear()
 
         print()
-        print('>>\t'+str(items)+ ' items in '+ str(counter)+ ' locations.')
+        if items>1 and counter>1:
+            print('>>\t'+str(items)+ ' items in '+ str(counter)+ ' locations.')
+        else:
+            print('>>\t'+str(items)+ ' item in '+ str(counter)+ ' location.')
 
 
 
