@@ -30,7 +30,6 @@ SA: Say again \n
         ''')
     
     def HMM(self):
-
         j = [self.order_dict[i] for i in self.order_list0]
         items = sum(j)
 
@@ -43,7 +42,8 @@ SA: Say again \n
             print('>>\t'+str(items)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
     def DN(self):
-        deliver = input('Deliver now? ')
+        print()
+        deliver = input('Deliver now? | ')
         if deliver == 'yes':
             InventorySys.Printer(self)
         elif deliver == 'no':
@@ -51,17 +51,25 @@ SA: Say again \n
         else:
             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             deliver = input('Deliver now? ')
-            
-    def RLP(self):
-        print()
-        self.Item_description = (self.prod[self.knockoff])[12:]
-        rlp='''>>\tLast pick was: {}-A-0{}, {}. Pick {} of {} each.\n'''.format(self.prodd, str(self.say_num),
-        self.Item_description, str(self.say_qty), str(self.itemm_value))
-        print(rlp)
 
+    def RLP(self):
+        aisle_data = self.prod[self.knockoff]
+        aisle_data0 = aisle_data[0:11]
+        if aisle_data[0:8] == 'Aisle AA':
+            rlp='''>>\tLast pick was: {}, {}.\n\tPick {} of {} each.\n'''.format(aisle_data0,
+            self.Item_description, str(self.say_qty), str(self.order_dict[self.knockoff]))
+            print(rlp)
+        else:
+            aisle_data1 = aisle_data[0:8]
+            aisle_data2 = aisle_data[22:24]
+            aisle_data3 = aisle_data[12:16]
+            rlp='''>>\tLast pick was: {}: {} | slot {}.\n\t{}.\n\tPick {} of {} each.\n'''.format(aisle_data1, aisle_data2, aisle_data3,
+            self.Item_description, str(self.say_qty), str(self.order_dict[self.knockoff]))
+            print(rlp)
+        
     def Stage(self):
         while True:
-            self.say_Stagenum=say_Stagenum=input('Stage number? ')
+            self.say_Stagenum=say_Stagenum=input('Stage number? | ')
             if say_Stagenum==str(self.Stage_numb):
                 while True:
                     self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
@@ -88,11 +96,11 @@ SA: Say again \n
     def Printer(self):
         print('Picking complete!')
         while True:
-            Printer=int(input('Printer? '))
+            Printer=int(input('Printer? | '))
             print()
             if Printer in [2,3]:
                 self.Stage_numb=Stage_numb=self.Stage_numb
-                select_Printer=input(str(Printer)+'? TIMELESS '+str(Printer)+'? correct? ')
+                select_Printer=input(str(Printer)+'? TIMELESS '+str(Printer)+'? correct? | ')
                 if select_Printer=='yes' and self.self_collect == 'no':
                     print('Deliver to Stage 0'+str(Stage_numb)+ '\n')
                     InventorySys.Stage(self)
@@ -106,7 +114,7 @@ SA: Say again \n
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             else:
                 while True:
-                    select_Printer = input(str(Printer)+'? TIMELESS '+str(Printer)+'? correct? ')
+                    select_Printer = input(str(Printer)+'? TIMELESS '+str(Printer)+'? correct? | ')
                     if select_Printer=='yes':
                         print(' >>\t TIMELESS '+str(Printer)+' not found. Try again!')
                     elif select_Printer=='no':
@@ -130,8 +138,8 @@ SA: Say again \n
     def Queuing(self):
         print()
         
-        self.stacklist=input('Load Assignment: ')
-        self.self_collect = self_collect = input('Self Collect? ')
+        self.stacklist=input('Load Assignment: | ')
+        self.self_collect = self_collect = input('Self Collect? | ')
         print()
         self.stacklist = self.stacklist.split()
         
@@ -144,7 +152,7 @@ SA: Say again \n
             try:
                 quan = math.floor(float(quan))
             except ValueError:
-                print('Quantity must be whole number > zero. Try again!')
+                print(' >>\tQuantity must be whole number > zero. Try again!')
                 InventorySys.Queuing(self)
 
             key.append(demo)
@@ -158,13 +166,13 @@ SA: Say again \n
                 else:
                     raise Exception
             except Exception:
-                print('Quantity must be > zero. Try again!')
+                print(' >>\tQuantity must be > zero. Try again!')
                 InventorySys.Queuing(self)
 
         try:
             assert self.self_collect in ['yes', 'no']
         except AssertionError:
-            print('Invalid [ '+self_collect+ ' ]. Enter yes or no')
+            print(' >>\tInvalid [ '+self_collect+ ' ]. Enter yes or no')
             self.self_collect = input('Self Collect? ')
         else:
             pass
@@ -173,7 +181,7 @@ SA: Say again \n
             if len(self.stacklist)==0:
                 raise Exception
         except Exception:
-            self.no_work=no_work=input(' >>\t No work available, continue to say ready: ')
+            self.no_work=no_work=input(' >>\tNo work available, continue to say ready: ')
             while True:
                 if no_work=='ready':
                     InventorySys.Queuing(self)
@@ -181,7 +189,6 @@ SA: Say again \n
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
         else:
             Stack.Aisle(self)
-
 
 class Stack:
 
@@ -202,9 +209,17 @@ class Stack:
                     'DP30': 'Aisle BA-04 A-02 0530 02 Desperados Tequila Beer (DP04) | 4% alc, 300ml, 24x330ml',
                     'FG1L': 'Aisle BB-86 A-16 3005 10 Famous Grouse Whisky | 40.5% alc, 1.5lt , 6x1.5lt'}
 
+        for i in self.key:
+            try:
+                assert i in self.prod
+            except AssertionError:
+                print('>>\t',i,'not found. Try again!')
+                InventorySys.Queuing(self)
+            else:
+                pass
+
         self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
         self.Stage_numb = choice(Stage_num)
-
 
         self.value = value = []
         for i in self.prod:
@@ -229,16 +244,10 @@ class Stack:
 
         while True: 
             for i in self.order_list0:
-                try:
-                    assert i in self.prod
-                except AssertionError:
-                    print(' >>\t Data not found. Try again!')
-                    InventorySys.Queuing(self)
-                else:
-                    pass
                 self.uprod = uprod = self.prod[i]
                 self.uprod = uprod[0:8]
 
+                self.tally = 0
                 try:
                     self.knockoff_val = (self.prod[self.knockoff])[0:8] 
                     if self.knockoff_val == self.uprod:
@@ -246,91 +255,103 @@ class Stack:
                     else:
                         pass
                 except AttributeError:
+                    self.tally +=1
                     pass
                 except Exception:
-                    if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':
+                    if self.uprod == 'Aisle AA':
                         Stack.verify_keg(self)                            
                     else:
                         Stack.verify_bottle(self)
                    
-
-                if self.uprod == 'Aisle AA' or self.uprod == 'Aisle AB':                    #Kegs
-                    self.status = status = input(self.uprod+': ')
+                if self.uprod == 'Aisle AA':                                        #Kegs
+                    self.status = input(self.uprod+': ')
                     while True:
                         self.prodd = prodd = copy.copy(self.uprod)
-                        if status == 'ready':
+                        if self.status == 'ready':
                             while True:
                                 Stack.verify_keg(self)
-
-                        elif status == 'how much more.c' or status == 'HMM.c':
+                        elif self.status == 'HMM.c':
                             InventorySys.HMM(self)
                             print()
-                            self.status=status=input(prodd+': ')
-
-                        elif status == 'aisle summary':
+                            self.status = input(prodd+': ')
+                        elif self.status == 'AS.c':
                             Stack.Aisle_summary(self)
-                            self.status=status=input(self.prodd+': ')
+                            self.status = input(self.prodd+': ')
 
-                        elif status == 'RLP.c':
+                        elif self.status == 'RLP.c' and self.tally != 0:
+                            print('\n>>\tRepeat last pick not available!')
+                            self.status = input(prodd+': ')
+                        elif self.status == 'RLP.c' and self.tally == 0:
                             InventorySys.RLP(self)
+                            self.status = input(prodd+': ')
 
-                        else: 
+                        elif self.status == 'DN.c' and self.tally ==0:
+                            InventorySys.DN(self)
+                            self.status = input(prodd+': ')
+                        elif self.status == 'DN.c' and self.tally !=0:
+                            print('>>\tDeliver now not available!\n')
+                            self.status = input(prodd+': ')
+
+                        else:
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                            self.status=status=input(prodd+': ')
+                            self.status = input(prodd+': ')
                             
-                elif self.uprod != 'Aisle AA':                                                               #  Bottles
-                    self.status = status = input(self.uprod+': ')
+                elif self.uprod != 'Aisle AA':                                        #Bottles
+                    self.status = input(self.uprod+': ')
                     while True:
-
                         self.prodd = prodd = copy.copy(self.uprod)
-                        if status == 'ready':
+                        if self.status == 'ready':
                             while True:
                                 Stack.verify_bottle(self)
-
-                        elif status == 'how much more.c' or status == 'HMM.c':
+                        elif self.status == 'HMM.c':
                             InventorySys.HMM(self)
                             print()
-                            self.status = status = input(prodd+': ')
-
-                        elif status == 'aisle summary':
+                            self.status = input(prodd+': ')
+                        elif self.status == 'AS.c':
                             Stack.Aisle_summary(self)
-                            self.status=status=input(self.prodd+': ')
+                            self.status = input(self.prodd+': ')
 
-                        elif status == 'RLP.c':
+                        elif self.status == 'RLP.c' and self.tally != 0:
+                            print('Repeat last pick not available!')
+                            self.status = input(prodd+': ')
+                        elif self.status == 'RLP.c' and self.tally == 0:
                             InventorySys.RLP(self)
+                            self.status = input(prodd+': ')
+                        
+                        elif self.status == 'DN.c' and self.tally ==0:
+                            InventorySys.DN(self)
+                            self.status = input(prodd+': ')
+                        elif self.status == 'DN.c' and self.tally !=0:
+                            print('>>\tDeliver now not available!\n')
+                            self.status = input(prodd+': ')
 
                         else: 
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                            self.status=status=input(prodd+': ')                                                                  
+                            self.status = input(prodd+': ')                                                                  
                 else: 
                     print(' >>\t Data not found. Try again!')
                     InventorySys.Queuing(self)
 
-
     def Kegs(self):
         self.knockoff = knockoff = self.knockoff
         if knockoff in self.order_dict:
-            quantity =self.order_dict[knockoff]
+            self.quantity = self.order_dict[knockoff]
             self.Item_description = (self.prod[knockoff])[12:]
-            print('Pick '+str(quantity)+' each. ', end = '')
+            print('Pick '+str(self.quantity)+' each. ', end = '')
             print(self.Item_description)
         
         while True:
-            self.say_qty=int(input('Quantity? '))
-            if self.say_qty == int(quantity):
-                Stack.Keg_repeater(self)
-
-            elif self.say_qty == 'deliver now.c' or self.say_qty == 'DN.c':
-                InventorySys.DN(self)      
-                                                                     
-            elif self.say_qty > int(quantity):
-                print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
-                                        str(int(quantity)), str(int(quantity)), self.Item_description)
-                print(print_err)
+            self.say_qty = input('Quantity? | ')
+            if int(self.say_qty) == int(self.quantity):
+                Stack.Keg_repeater(self)                                                    
+            elif int(self.say_qty) > int(self.quantity):
+                self.print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
+                                        str(self.quantity), str(self.quantity), self.Item_description)
+                print(self.print_err)
                 print()
             else:
-                self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I only asked for '+str(int(quantity))+
-                                                 '.\n \t Is this a short product? ')
+                self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I only asked for '+str(self.quantity)+
+                                                 '.\n \t Is this a short product? | ')
                 if short_prod=='yes':
                     Stack.Keg_repeater(self)
                     InventorySys.Printer(self)
@@ -345,28 +366,24 @@ class Stack:
     
     def Bottles(self):
         self.knockoff = knockoff = self.knockoff
-        if knockoff in self.order_dict:
+        if self.knockoff in self.order_dict:
             self.quantity = self.order_dict[knockoff]
-            self.Item_description = (self.prod[knockoff])[25:]
+            self.Item_description = (self.prod[self.knockoff])[25:]
             print('Pick '+str(self.quantity)+' each. ', end = '')
             print(self.Item_description)
 
         while True:
-            self.say_qty = int(input('Quantity? '))
-            if self.say_qty == int(self.quantity):
+            self.say_qty = input('Quantity? | ')
+            if int(self.say_qty) == self.quantity:
                 Stack.Bottle_ID(self) 
-            
-            elif self.say_qty == 'deliver now.c' or self.say_qty == 'DN.c':
-                InventorySys.DN(self)
-
-            elif self.say_qty > int(self.quantity):
-                print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
-                                                 str(self.quantity), str(self.quantity), self.Item_description)
-                print(print_err)
+            elif int(self.say_qty) > self.quantity:
+                self.print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
+                                        str(self.quantity), str(self.quantity), self.Item_description)
+                print(self.print_err)
                 print()
             else:
                 self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I only asked for '+str(self.quantity)+
-                                                 '.\n \t Is this a short product? ')
+                                                 '.\n \t Is this a short product? | ')
                 print()
                 if short_prod=='yes':
                     Stack.Bottle_ID(self)
@@ -374,7 +391,7 @@ class Stack:
                     break
                 elif short_prod=='no':
                     pass
-                elif short_prod == 'how much more.c' or short_prod == 'HMM.c':
+                elif short_prod == 'HMM.c':
                     InventorySys.HMM(self)
                     print()
                 else:
@@ -382,7 +399,7 @@ class Stack:
 
     def Keg_repeater(self):
         print()
-        print('Items picked: '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: '+str(self.newstacklist)+'\n')
+        print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
         self.prodd = copy.copy(self.prod)
         
         if len(self.newstacklist)>0:
@@ -395,12 +412,12 @@ class Stack:
         while True:
             self.item_barcode = item_barcode = self.prod
             self.item_barcode = (item_barcode[self.knockoff])[17:21]
-            self.item_no = item_no = input('Item number | '+self.item_barcode+ ': ')
-            self.confirm_item_no = input(str(item_no)+ ' corect? ')
+            self.item_no = item_no = input('Item number | '+self.item_barcode+ ': | ')
+            self.confirm_item_no = input(str(item_no)+ ' corect? | ')
             print()
             
             if self.confirm_item_no == 'yes' and item_no == self.item_barcode:
-                print('Items picked: '+str(self.say_qty)+' ['+str(self.knockoff)+'] '+'\nItems on queue: '+str(self.newstacklist)+'\n')
+                print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] '+'\nItems on queue: | '+str(self.newstacklist)+'\n')
                 self.prodd = copy.copy(self.prod)
 
                 if len(self.newstacklist)>0:
@@ -410,7 +427,7 @@ class Stack:
                     InventorySys.Printer(self)
 
             elif self.confirm_item_no == 'yes' and item_no != self.item_barcode:
-                print('Invalid '+ item_no+'. Try again!\n')
+                print('>>\tInvalid '+ item_no+'. Try again!\n')
             else:
                 if self.confirm_item_no == 'no':
                     pass
@@ -420,7 +437,6 @@ class Stack:
         del self.order_list0[0]
         return order
     
-
     def verify_keg(self):
         for i in self.order_list0:
                 
@@ -452,7 +468,6 @@ class Stack:
             else:
                 print(' >>\t Wrong check digit. Try again! ')
 
-
     def Aisle_summary(self):
         try:
             aisle = self.knockoff_val
@@ -477,19 +492,18 @@ class Stack:
             k = k[0:11]
             if k in new_value:
                 final.append(i)
-        print(final)
 
-        j = [eval(self.order_dict[i]) for i in final]
+        j = [self.order_dict[i] for i in final]
         items = sum(j)
         final.clear()
 
         print()
         if items>1 and counter>1:
             print('>>\t'+str(items)+ ' items in '+ str(counter)+ ' locations.')
+        elif items>1 and counter==1:
+            print('>>\t'+str(items)+ ' items in '+ str(counter)+ ' location.')
         else:
             print('>>\t'+str(items)+ ' item in '+ str(counter)+ ' location.')
-
-
 
 class Setup:
     def Log_timestamp(self):
@@ -501,7 +515,7 @@ class Setup:
                             'Charlie': 'Charlie Dyer', 'Sean': 'Sean Turner', 'Josh': 'Josh Darley'}
         while True:
             print()
-            self.key = key = input('Selecting Operator: ')
+            self.key = key = input('Selecting Operator: | ')
             if key in match:
                 self.value = match[key]
                 print('Current Operator is ' +match[key] +'.\n')
