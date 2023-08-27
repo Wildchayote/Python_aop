@@ -63,8 +63,7 @@ SA: Say again \n
             aisle_data1 = aisle_data[0:8]
             aisle_data2 = aisle_data[22:24]
             aisle_data3 = aisle_data[12:16]
-            rlp='''>>\tLast pick was: {}: {} | slot {}.\n\t{}.\n\t
-            Pick {} of {} each.\n'''.format(aisle_data1, aisle_data2, aisle_data3,
+            rlp='''>>\tLast pick was: {}: {} | slot {}.\n\t{}.\n\tPick {} of {} each.\n'''.format(aisle_data1, aisle_data2, aisle_data3,
             self.Item_description, str(self.say_qty), str(self.order_dict[self.knockoff]))
             print(rlp)
         
@@ -330,7 +329,7 @@ class Stack:
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
                             self.status = input(prodd+': ')                                                                  
                 else: 
-                    print(' >>\t Data not found. Try again!')
+                    print(' >>\t Please see your supervisor!')
                     InventorySys.Queuing(self)
 
     def Kegs(self):
@@ -432,11 +431,6 @@ class Stack:
             else:
                 if self.confirm_item_no == 'no':
                     pass
- 
-    def pop(self):
-        order = self.order_list0[0]
-        del self.order_list0[0]
-        return order
     
     def verify_keg(self):
         for i in self.order_list0:
@@ -505,6 +499,16 @@ class Stack:
             print('>>\t'+str(items)+ ' items in '+ str(counter)+ ' location.')
         else:
             print('>>\t'+str(items)+ ' item in '+ str(counter)+ ' location.')
+
+
+    #def say_again(self):
+
+
+    def pop(self):
+        order = self.order_list0[0]
+        del self.order_list0[0]
+        return order
+
 
 class Setup:
     def Log_timestamp(self):
