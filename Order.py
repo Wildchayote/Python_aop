@@ -63,7 +63,8 @@ SA: Say again \n
             aisle_data1 = aisle_data[0:8]
             aisle_data2 = aisle_data[22:24]
             aisle_data3 = aisle_data[12:16]
-            rlp='''>>\tLast pick was: {}: {} | slot {}.\n\t{}.\n\tPick {} of {} each.\n'''.format(aisle_data1, aisle_data2, aisle_data3,
+            rlp='''>>\tLast pick was: {}: {} | slot {}.\n\t{}.\n\t
+            Pick {} of {} each.\n'''.format(aisle_data1, aisle_data2, aisle_data3,
             self.Item_description, str(self.say_qty), str(self.order_dict[self.knockoff]))
             print(rlp)
         
