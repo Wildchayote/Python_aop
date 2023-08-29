@@ -193,21 +193,21 @@ SA: Say again \n
 class Stack:
 
     def Aisle(self):
-        self.prod ={'CA11': 'Aisle AA-07 Carling (CA11) | 11 gal keg, 63.05kg',         'CA22': 'Aisle AA-11 Carling (CA22) | 22 gal keg, 100kg',    
-                    'FO11': 'Aisle AA-01 Fosters (FO11) | 11 gal keg, 63.05kg',         'FO22': 'Aisle AA-06 Fosters (FO22) | 22 gal keg, 100kg',      
-                    'CO11': 'Aisle AA-05 Coors Lite (CO11) | 11 gal keg, 63.05kg',      'CO22': 'Aisle AA-02 Coors Lite (CO22) | 22 gal keg, 100kg',    
-                    'JS11': 'Aisle AA-12 John Smiths (JS11) | 11 gal keg, 63.05kg',     'JS22': 'Aisle AA-08 John Smiths (JS22) | 22 gal keg, 100kg',    
-                    'MA11': 'Aisle AA-09 Madri Lager (MA11) | 11 gal, 63.05kg',         'GD11': 'Aisle AA-10 Guiness Draughts (GS11) | 11 gal keg, 63.05kg',
-                    'SA11': 'Aisle AA-13 Stella Attoires (SA11) | 10.5 gal, 55.05kg',   'TS11': 'Aisle AA-14 Trophy Special (TS11) | 11 gal keg, 63.05kg',
-                    'TB09': 'Aisle AA-16 Theakson Bitters (TB09) | 09 gal keg, 40kg',   'PN11': 'Aisle AA-04 Peroni Special Lager (PN11) | 11 gal keg, 63.05kg',
-                    'BI11': 'Aisle AA-15 Birra Moretti (BI11) | 11 gal keg, 63.05kg',
+        self.prod ={'CA11': 'Aisle AA-07 Carling (CA11) | 11 gal keg',         'CA22': 'Aisle AA-11 Carling (CA22) | 22 gal keg',    
+                    'FO11': 'Aisle AA-01 Fosters (FO11) | 11 gal keg',         'FO22': 'Aisle AA-06 Fosters (FO22) | 22 gal keg',      
+                    'CO11': 'Aisle AA-05 Coors Lite (CO11) | 11 gal keg',      'CO22': 'Aisle AA-02 Coors Lite (CO22) | 22 gal keg',    
+                    'JS11': 'Aisle AA-12 John Smiths (JS11) | 11 gal keg',     'JS22': 'Aisle AA-08 John Smiths (JS22) | 22 gal keg',    
+                    'MA11': 'Aisle AA-09 Madri Lager (MA11) | 11 gal',         'GD11': 'Aisle AA-10 Guiness Draughts (GS11) | 11 gal keg',
+                    'SA11': 'Aisle AA-13 Stella Attoires (SA11) | 10.5 gal',   'TS11': 'Aisle AA-14 Trophy Special (TS11) | 11 gal keg',
+                    'TB09': 'Aisle AA-16 Theakson Bitters (TB09) | 09 gal keg','PN11': 'Aisle AA-04 Peroni 4.6 (PN11) | 11 gal keg',
+                    'BI11': 'Aisle AA-15 Birra Moretti (BI11) | 11 gal keg',
 
-                    'AB75': 'Aisle BE-79 A-03 7683 01 Absolut Vodka (AB40) | 40% alc, 6x75cl', 
-                    'SM75': 'Aisle BE-47 A-01 1118 01 Smirnoff Vodka (SM37) | 38% alc, 6x75cl', 
-                    'PE7L': 'Aisle BL-50 A-02 9785 12 Britvic Pepsi Cola Max | 7lt Bib', 
-                    'CE35': 'Aisle BA-90 A-03 3248 03 Corona Extra Cider (CE35) | 4.5% alc, 350ml, 24x350ml',
-                    'DP30': 'Aisle BA-04 A-02 0530 02 Desperados Tequila Beer (DP04) | 4% alc, 300ml, 24x330ml',
-                    'FG1L': 'Aisle BB-86 A-16 3005 10 Famous Grouse Whisky | 40.5% alc, 1.5lt , 6x1.5lt'}
+                    'AB75': 'Aisle BE-79-A-03 7683 01 Absolut Vodka (AB40) | 40% alc', 
+                    'SM75': 'Aisle BE-47-A-01 1118 01 Smirnoff Vodka (SM37) | 38% alc', 
+                    'PE7L': 'Aisle BL-50-A-02 9785 12 Britvic Pepsi Cola Max | 7lt Bib', 
+                    'CE35': 'Aisle BA-90-A-03 3248 03 Corona Extra NBA (CE35) | 4.5% alc',
+                    'DP30': 'Aisle BA-04-A-02 0530 02 Desperados Tequila Beer (DP04) | 4% alc',
+                    'FG1L': 'Aisle BB-86-A-16 3005 10 Famous Grouse Whisky | 40.5% alc'}
 
         for i in self.key:
             try:
