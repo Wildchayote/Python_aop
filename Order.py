@@ -506,7 +506,7 @@ class Stack:
             if aisle == self.knockoff_val:
                 raise AttributeError
             else:
-                pass
+                self.skip_slot.append(self.order_list0)
         except AttributeError:
             self.uprod = uprod = self.uprod
             aisle = uprod
