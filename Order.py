@@ -500,8 +500,18 @@ class Stack:
         else:
             print('>>\t'+str(items)+ ' item in '+ str(counter)+ ' location.')
 
-
-    #def say_again(self):
+    def skip_slot(self):
+        try:
+            aisle = self.knockoff_val
+            if aisle == self.knockoff_val:
+                raise AttributeError
+            else:
+                pass
+        except AttributeError:
+            self.uprod = uprod = self.uprod
+            aisle = uprod
+        self.newstacklist.append(self.knockoff)
+        
 
 
     def pop(self):
