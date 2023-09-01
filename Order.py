@@ -582,7 +582,6 @@ class Stack:
         j = [self.order_dict[i] for i in final]
         items = sum(j)
         final.clear()
-        print(items)
 
         print()
         if items>1 and counter>1:
