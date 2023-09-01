@@ -6,27 +6,15 @@ import math
 
 
 class InventorySys:
-
-    def Command(self):
-        self.Command = Command = input('Talkman: say (help.c, RLP.c, DN.c, HMM.c): ')
-        if Command == 'help.c':
-            InventorySys.help(self)
-        elif Command == 'RLP.c':
-            print('Repeat last pick not allowed!')
-        elif Command == 'how much more.c' or Command == 'HMM.c':
-            InventorySys.HMM(self)
-        elif Command == 'DN.c':
-            InventorySys.DN(self)
-        else:
-            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-            
+       
     def help(self):
         print('''\n
-RLP: Repeat last pick
-AS: Aisle summary
-DN: Deliver now
-HMM: How much more
-SA: Say again \n
+    COMMAND LIST:
+RLP.c: Repeat last pick
+AS.c: Aisle summary
+DN.c: Deliver now
+HMM.c: How much more
+SS.c: Skip slot \n
         ''')
     
     def HMM(self):
@@ -87,7 +75,7 @@ SA: Say again \n
                                 print(' >>\t I can\'t hear you. Please speak up a bit.\n')
                     else:
                         print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                        InventorySys.Command(self)
+                        InventorySys.help(self)
             else: 
                 print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
                 print()
@@ -244,19 +232,33 @@ class Stack:
         try:
             self.counter2 != 0
         except AttributeError:
-            print('Skip slot Idle')
             pass
         else:
-            print('Skip slot invoked')
+            
+
             try:
+                try:
+                    if self.skips != 'yes':
+                        raise Exception
+                    else:
+                        pass
+                except AttributeError:
+                    pass
+
                 self.newstacklist
             except AttributeError:
-                print('NSL not available')
                 self.order_list0 = copy.copy(self.order_list1)
+            except Exception:
+                try:
+                    counter1 == 0
+                except UnboundLocalError:
+                    self.order_list0 = copy.copy(self.order_list0)
+                else:
+                    self.order_list0 = copy.copy(self.newstacklist)
             else:
+                counter1 = 0
                 self.order_list0 = copy.copy(self.newstacklist)
-                print('\nNSL: ',self.newstacklist)
-            print('OL0: ',self.order_list0)
+            print('Order list in RT: ',self.order_list0)
             print()
 
 
@@ -365,6 +367,74 @@ class Stack:
             self.status = input(prodd+': ') 
     
 
+    def Dial0_kegs(self):
+        self.say_num = say_num = input((self.aisle_num)+': ')
+        if say_num == self.aisle_num:
+            print()
+            self.knockoff = Stack.pop(self)
+            self.newstacklist = copy.copy(self.order_list0)
+            Stack.Kegs(self)
+        
+        elif say_num == 'HMM.c':
+            InventorySys.HMM(self)
+            print()
+
+        elif say_num == 'AS.c':
+
+            Stack.Aisle_summary(self)
+
+        elif say_num == 'RLP.c' and self.tally != 0:
+            print('Repeat last pick not allowed!')
+        elif say_num == 'RLP.c' and self.tally == 0:
+            InventorySys.RLP(self)
+        
+        elif say_num == 'DN.c' and self.tally ==0:
+            InventorySys.DN(self)
+
+        elif say_num == 'DN.c' and self.tally !=0:
+            print('>>\tDeliver now not allowed!\n')
+
+        elif say_num == 'SS.c':
+            Stack.skip_slot(self)
+            Stack.Aisle(self)
+        else:
+            print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
+
+        
+    def Dial0_bottles(self):
+        self.say_num = say_num = input(str(self.seg)+' | '+str(self.check)+': '+self.check_digit+': ')
+        if say_num == str(self.check_digit):
+            print()
+            self.knockoff = Stack.pop(self)
+            self.newstacklist  = copy.copy(self.order_list0)
+            Stack.Bottles(self)
+        
+        elif say_num == 'HMM.c':
+            InventorySys.HMM(self)
+            print()
+            
+        elif say_num == 'AS.c':
+            Stack.Aisle_summary(self)
+
+        elif say_num == 'RLP.c' and self.tally != 0:
+            print('Repeat last pick not allowed!')
+
+        elif say_num == 'RLP.c' and self.tally == 0:
+            InventorySys.RLP(self)
+        
+        elif say_num == 'DN.c' and self.tally ==0:
+            InventorySys.DN(self)
+
+        elif say_num == 'DN.c' and self.tally !=0:
+            print('>>\tDeliver now not allowed!\n')
+
+        elif say_num == 'SS.c':
+            Stack.skip_slot(self)
+            Stack.Aisle(self)
+        else:
+            print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
+
+
     def Kegs(self):
         self.knockoff = knockoff = self.knockoff
         if knockoff in self.order_dict:
@@ -468,17 +538,11 @@ class Stack:
     
     def verify_keg(self):
         for i in self.order_list0:
-            self.uprod = self.prod[i]
-            self.aisle_num = self.uprod[9:11]
+            self.uprod =uprod = self.prod[i]
+            self.aisle_num = uprod[9:11]
+            self.uprod = uprod[0:8]
             while True:
-                self.say_num = say_num = input((self.aisle_num)+': ')
-                if say_num == self.aisle_num:
-                    print()
-                    self.knockoff = Stack.pop(self)
-                    self.newstacklist = copy.copy(self.order_list0)
-                    Stack.Kegs(self)
-                else:
-                    print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
+                Stack.Dial0_kegs(self)
 
     def verify_bottle(self):
         for i in self.order_list0:
@@ -486,15 +550,9 @@ class Stack:
             self.seg = uprod[22:24]
             self.check_digit = uprod[9:11]
             self.check = uprod[12:16]
+            self.uprod = uprod[0:8]
             while True:
-                self.say_num = say_num = input(str(self.seg)+' | '+str(self.check)+': '+self.check_digit+': ')
-                if say_num == str(self.check_digit):
-                    print()
-                    self.knockoff = Stack.pop(self)
-                    self.newstacklist  = copy.copy(self.order_list0)
-                    Stack.Bottles(self)
-                else:
-                    print(' >>\t Wrong check digit. Try again! ')
+                Stack.Dial0_bottles(self)
 
     def Aisle_summary(self):
         try:
@@ -524,6 +582,7 @@ class Stack:
         j = [self.order_dict[i] for i in final]
         items = sum(j)
         final.clear()
+        print(items)
 
         print()
         if items>1 and counter>1:
@@ -535,22 +594,21 @@ class Stack:
 
     def skip_slot(self):
         self.counter2 = 1
-        skip = input('Skip slot? | ')
+        self.skips = input('Skip slot? | ')
         try:
-            assert skip in ['yes', 'no']
+            assert self.skips in ['yes', 'no']
+            if self.skips == 'yes':
+                pass
+            else:
+                Stack.Aisle(self)
         except AssertionError:
             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-            skip = input('Skip slot? | ')
+            Stack.skip_slot(self)
         
-        if skip == 'yes':
-            pass
-        else:
-            self.status = input(self.prodd+': ')
 
         try:
             self.newstacklist
         except AttributeError:
-            print('NSL not available')
             self.skip = copy.copy(self.order_list0)
             self.skip0 = self.skip[0]
             del self.skip[0]
@@ -562,7 +620,6 @@ class Stack:
             self.skip2 = self.skip1[0]
             del self.skip1[0]
             self.skip1.append(self.skip2)
-            #self.order_list2 = copy.copy(self.skip1)
             self.newstacklist = copy.copy(self.skip1)
 
 
