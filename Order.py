@@ -26,7 +26,19 @@ DN: Deliver now
 HMM: How much more
 SA: Say again \n
         ''')
-    
+    try:
+        self.knockoff = copy.copy(self.knockoff_val)
+        if counter1!=0:
+            raise Exception
+        else:
+            pass
+    except AttributeError:
+        self.knockoff = copy.copy(self.newstacklist)
+        print('Skip Slot activated')
+        print()
+    else:
+        Stack.Printer(self)
+        
     def HMM(self):
         print('>>\t'+str(len(self.stacklist))+' each in '+str(len(self.stacklist))+ ' locations.')
     
