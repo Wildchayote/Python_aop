@@ -130,7 +130,7 @@ SA: Say again \n
             pass
 
         try:
-            if len(stacklist)==0:
+            if len(self.stacklist)==0:
                 raise IndexError
         except IndexError:
             while True:
