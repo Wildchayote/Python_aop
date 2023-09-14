@@ -156,7 +156,8 @@ SA: Say again \n
         
 class Stack:
     def Aisle(self):
-        self.prod = {'CA11':'Aisle AA', 'CA22':'Aisle AA',
+        self.prod = {
+                    'CA11':'Aisle AA Carling (CA11) | ', 'CA22':'Aisle AA',
                     'FO11':'Aisle AA',  'FO22':'Aisle AA',
                     'BI11':'Aisle AA',  'BI22':'Aisle AB',
                     'CO11':'Aisle AA',  'CO22':'Aisle AA',
