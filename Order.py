@@ -234,8 +234,6 @@ class Stack:
         except AttributeError:
             pass
         else:
-            
-
             try:
                 try:
                     if self.skips != 'yes':
@@ -244,7 +242,6 @@ class Stack:
                         pass
                 except AttributeError:
                     pass
-
                 self.newstacklist
             except AttributeError:
                 self.order_list0 = copy.copy(self.order_list1)
