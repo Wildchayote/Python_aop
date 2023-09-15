@@ -1,7 +1,7 @@
 user =input('Enter Name: ')
 isFemale =True
 State =input('State: ')                                                           
-print('Wife material- Marry her :)' if (user == 'Adeola' and isFemale == True and State == 'Ogun') else 'We don\'t know')
+print('Wife material- Marry her :)' if (user == 'Adeola' and isFemale == True and State == 'Ogun') else 'Don\'t marry her')
 
 
 
