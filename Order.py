@@ -195,9 +195,11 @@ class Stack:
                     'PE7L': 'Aisle BL-50-A-02 9785 12 Britvic Pepsi Cola Max | 7lt Bib', 
                     'CE35': 'Aisle BA-90-A-03 3248 03 Corona Extra NBA (CE35) | 4.5% alc',
                     'DP30': 'Aisle BA-04-A-02 0530 02 Desperados Tequila Beer (DP04) | 4% alc',
-                    'FG1L': 'Aisle BB-86-A-16 3005 10 Famous Grouse Whisky | 40.5% alc'}
+                    'FG1L': 'Aisle BB-86-A-16 3005 10 Famous Grouse Whisky | 40.5% alc'
+                    }
 
-        self.Stage_num = Stage_num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+        self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15',
+                                      '16','17','18','19','20','21','22','23','24','25','26','27','28','29','30']
         self.Stage_numb = choice(Stage_num)
 
         for i in self.key:
@@ -242,6 +244,7 @@ class Stack:
                         pass
                 except AttributeError:
                     pass
+
                 self.newstacklist
             except AttributeError:
                 self.order_list0 = copy.copy(self.order_list1)
