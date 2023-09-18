@@ -33,16 +33,16 @@ SS.c: Skip slot \n
             print(rlp)
 
     def HMM(self):
-        ListOf_AllQuantity = [self.order_dict[item] for item in self.order_list0]            # ListOfAllQuantity in the order list
-        SumOfQuantity = sum(ListOf_AllQuantity)
+        self.ListOf_AllQuantity = [self.order_dict[item] for item in self.order_list0]            # ListOfAllQuantity in the order list
+        self.SumOfQuantity = sum(self.ListOf_AllQuantity)
 
         print()
-        if SumOfQuantity>1 and len(self.order_list0) > 1:
-            print('>>\t'+str(SumOfQuantity)+ ' items in '+ str(len(self.order_list0))+ ' locations.')
-        elif SumOfQuantity>1 and len(self.order_list0) ==1:
-            print('>>\t'+str(SumOfQuantity)+ ' items in '+ str(len(self.order_list0))+ ' location.')
+        if self.SumOfQuantity>1 and len(self.order_list0) > 1:
+            print('>>\t'+str(self.SumOfQuantity)+ ' items in '+ str(len(self.order_list0))+ ' locations.')
+        elif self.SumOfQuantity>1 and len(self.order_list0) ==1:
+            print('>>\t'+str(self.SumOfQuantity)+ ' items in '+ str(len(self.order_list0))+ ' location.')
         else:
-            print('>>\t'+str(SumOfQuantity)+ ' item in '+ str(len(self.order_list0))+ ' location.')
+            print('>>\t'+str(self.SumOfQuantity)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
     def DN(self):
         print()
@@ -71,6 +71,9 @@ SS.c: Skip slot \n
                     self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
                     print()
                     if next_assignment=='ready':
+                        self.next_task = None
+                        self.tally != None
+                        del self.newstacklist
                         InventorySys.Queuing(self)
                     elif next_assignment == 'sign off':
                         while True:
@@ -124,7 +127,7 @@ SS.c: Skip slot \n
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
 
     def Recur(self):
-        self.start = start=input('VOICE picking. Directive picking. To receive work, say ready:  ')
+        self.start = start = input('VOICE picking. Directive picking. To receive work, say ready:  ')
         while True:
             if start == 'ready':
                 self.password = password = input('Password? ')
@@ -176,7 +179,6 @@ SS.c: Skip slot \n
             print(' >>\tInvalid [ '+self_collect+ ' ]. Enter yes or no')
             self.self_collect = input('Self Collect? ')
         else:
-            print('CRASH SITE')
             try:
                 if len(self.stacklist)==0:
                     raise Exception
@@ -243,7 +245,7 @@ class Stack:
             self.order_list0 = copy.copy(self.order_list0)
         else:
             pass
-
+           
         try:
             self.counter2 != 0
         except AttributeError:
@@ -277,109 +279,100 @@ class Stack:
 
         while True:
             for item in self.order_list0:
+
                 self.uprod = uprod = self.prod[item]
                 self.uprod = uprod[0:8]
 
-                self.tally = 0
                 try:
                     self.knockoff_val = (self.prod[self.knockoff])[0:8]
-                    if self.knockoff_val == self.uprod:
+                    if self.knockoff_val == self.uprod and self.next_task != None:
                         raise Exception
                     else:
                         pass
                 except AttributeError:
-                    self.tally +=1
+                    self.tally = None
                 except Exception:
                     if self.uprod == 'Aisle AA':
                         Stack.verify_keg(self)                            
                     else:
                         Stack.verify_bottle(self)
-                   
+                
                 if self.uprod == 'Aisle AA':                            #Kegs
                     self.status = input(self.uprod+': ')
                     while True:
-                        Stack.Dial_kegs(self)
+                        self.prodd = prodd = copy.copy(self.uprod)
+                        if self.status == 'ready':
+                            while True:
+                                Stack.verify_keg(self)
+                        elif self.status == 'HMM.c':
+                            InventorySys.HMM(self)
+                            print()
+                            self.status = input(prodd+': ')
+                        elif self.status == 'AS.c':
+                            Stack.Aisle_summary(self)
+                            self.status = input(self.prodd+': ')
+
+                        elif self.status == 'RLP.c' and self.tally == None:
+                            print('\n>>\tRepeat last pick not allowed!')
+                            self.status = input(prodd+': ')
+                        elif self.status == 'RLP.c' and self.tally != None:
+                            InventorySys.RLP(self)
+                            self.status = input(prodd+': ')
+
+                        elif self.status == 'DN.c' and self.tally !=None:
+                            InventorySys.DN(self)
+                            self.status = input(prodd+': ')
+                        elif self.status == 'DN.c' and self.tally == None:
+                            print('>>\tDeliver now not allowed!\n')
+                            self.status = input(prodd+': ')
+
+                        elif self.status == 'SS.c':
+                            Stack.skip_slot(self)
+                            Stack.Aisle(self)
+                        else:
+                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+                            self.status = input(prodd+': ')
                             
                 elif self.uprod != 'Aisle AA':                          #Bottles
                     self.status = input(self.uprod+': ')
                     while True:
-                        Stack.Dial_bottles(self)                                                                 
+                        self.prodd = prodd = copy.copy(self.uprod)
+                        if self.status == 'ready':
+                            while True:
+                                Stack.verify_bottle(self)
+                        elif self.status == 'HMM.c':
+                            InventorySys.HMM(self)
+                            print()
+                            self.status = input(prodd+': ')
+                        elif self.status == 'AS.c':
+                            Stack.Aisle_summary(self)
+                            self.status = input(self.prodd+': ')
+
+                        elif self.status == 'RLP.c' and self.tally == None:
+                            print('Repeat last pick not allowed!')
+                            self.status = input(prodd+': ')
+                        elif self.status == 'RLP.c' and self.tally != None:
+                            InventorySys.RLP(self)
+                            self.status = input(prodd+': ')
+                        
+                        elif self.status == 'DN.c' and self.tally != None:
+                            InventorySys.DN(self)
+                            self.status = input(prodd+': ')
+                        elif self.status == 'DN.c' and self.tally == None:
+                            print('>>\tDeliver now not allowed!\n')
+                            self.status = input(prodd+': ')
+
+                        elif self.status == 'SS.c':
+                            Stack.skip_slot(self)
+                            Stack.Aisle(self)
+
+                        else: 
+                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+                            self.status = input(prodd+': ')                                                                 
                 else: 
                     print(' >>\t Please see your supervisor!')
-                    InventorySys.Queuing(self)
-
-
-    def Dial_kegs(self):
-        self.prodd = prodd = copy.copy(self.uprod)
-        if self.status == 'ready':
-            while True:
-                Stack.verify_keg(self)
-        elif self.status == 'HMM.c':
-            InventorySys.HMM(self)
-            print()
-            self.status = input(prodd+': ')
-        elif self.status == 'AS.c':
-            Stack.Aisle_summary(self)
-            self.status = input(self.prodd+': ')
-
-        elif self.status == 'RLP.c' and self.tally != 0:
-            print('\n>>\tRepeat last pick not allowed!')
-            self.status = input(prodd+': ')
-        elif self.status == 'RLP.c' and self.tally == 0:
-            InventorySys.RLP(self)
-            self.status = input(prodd+': ')
-
-        elif self.status == 'DN.c' and self.tally ==0:
-            InventorySys.DN(self)
-            self.status = input(prodd+': ')
-        elif self.status == 'DN.c' and self.tally !=0:
-            print('>>\tDeliver now not allowed!\n')
-            self.status = input(prodd+': ')
-
-        elif self.status == 'SS.c':
-            Stack.skip_slot(self)
-            Stack.Aisle(self)
-        else:
-            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-            self.status = input(prodd+': ')
-        
-
-    def Dial_bottles(self):
-        self.prodd = prodd = copy.copy(self.uprod)
-        if self.status == 'ready':
-            while True:
-                Stack.verify_bottle(self)
-        elif self.status == 'HMM.c':
-            InventorySys.HMM(self)
-            print()
-            self.status = input(prodd+': ')
-        elif self.status == 'AS.c':
-            Stack.Aisle_summary(self)
-            self.status = input(self.prodd+': ')
-
-        elif self.status == 'RLP.c' and self.tally != 0:
-            print('Repeat last pick not allowed!')
-            self.status = input(prodd+': ')
-        elif self.status == 'RLP.c' and self.tally == 0:
-            InventorySys.RLP(self)
-            self.status = input(prodd+': ')
-        
-        elif self.status == 'DN.c' and self.tally ==0:
-            InventorySys.DN(self)
-            self.status = input(prodd+': ')
-        elif self.status == 'DN.c' and self.tally !=0:
-            print('>>\tDeliver now not allowed!\n')
-            self.status = input(prodd+': ')
-
-        elif self.status == 'SS.c':
-            Stack.skip_slot(self)
-            Stack.Aisle(self)
-
-        else: 
-            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-            self.status = input(prodd+': ') 
+                    InventorySys.Queuing(self)                 
     
-
     def Dial0_kegs(self):
         self.say_num = say_num = input((self.aisle_num)+': ')
         if say_num == self.aisle_num:
@@ -396,15 +389,15 @@ class Stack:
 
             Stack.Aisle_summary(self)
 
-        elif say_num == 'RLP.c' and self.tally != 0:
+        elif say_num == 'RLP.c' and self.tally == None:
             print('Repeat last pick not allowed!')
-        elif say_num == 'RLP.c' and self.tally == 0:
+        elif say_num == 'RLP.c' and self.tally != None:
             InventorySys.RLP(self)
         
-        elif say_num == 'DN.c' and self.tally ==0:
+        elif say_num == 'DN.c' and self.tally != None:
             InventorySys.DN(self)
 
-        elif say_num == 'DN.c' and self.tally !=0:
+        elif say_num == 'DN.c' and self.tally == None:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -429,16 +422,16 @@ class Stack:
         elif say_num == 'AS.c':
             Stack.Aisle_summary(self)
 
-        elif say_num == 'RLP.c' and self.tally != 0:
+        elif say_num == 'RLP.c' and self.tally == None:
             print('Repeat last pick not allowed!')
 
-        elif say_num == 'RLP.c' and self.tally == 0:
+        elif say_num == 'RLP.c' and self.tally != None:
             InventorySys.RLP(self)
         
-        elif say_num == 'DN.c' and self.tally ==0:
+        elif say_num == 'DN.c' and self.tally != None:
             InventorySys.DN(self)
 
-        elif say_num == 'DN.c' and self.tally !=0:
+        elif say_num == 'DN.c' and self.tally == None:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -461,13 +454,13 @@ class Stack:
             if int(self.say_qty) == int(self.quantity):
                 Stack.Keg_repeater(self)                                                    
             elif int(self.say_qty) > int(self.quantity):
-                self.print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
+                self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
                                         str(self.quantity), str(self.quantity), self.Item_description)
                 print(self.print_err)
                 print()
             else:
                 self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                 '.\n \t Is this a short product? | ')
+                                                 '.\n\t Is this a short product? | ')
                 if short_prod=='yes':
                     Stack.Keg_repeater(self)
                     InventorySys.Printer(self)
@@ -494,13 +487,13 @@ class Stack:
             if int(self.say_qty) == self.quantity:
                 Stack.Bottle_ID(self) 
             elif int(self.say_qty) > self.quantity:
-                self.print_err = ' >>\tYou said {}, I only asked for {}.\n \tTry again, pick {} each.\n \t{}'.format(str(self.say_qty),
+                self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
                                         str(self.quantity), str(self.quantity), self.Item_description)
                 print(self.print_err)
                 print()
             else:
                 self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                 '.\n \t Is this a short product? | ')
+                                                 '.\n\t Is this a short product? | ')
                 print()
                 if short_prod=='yes':
                     Stack.Bottle_ID(self)
