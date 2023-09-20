@@ -1,8 +1,10 @@
-def NairaException:
+print('\nNaira ~ Pound: Enter symbol £.\nPound ~ Naira: Enter symbol N.\n')
+
+def NairaException():
     try:
         amount=float(input(" You are converting: £"))
-    except TypeError:
-        print("Wrong input. Try again!")
+    except ValueError:
+        print("\n>> Error: Wrong input. Try again!")
         NairaException()
     else:
         convert=amount*one_Pnaira
@@ -12,15 +14,15 @@ def NairaException:
     Do you want to perform another conversion?
     Enter YES to perform another conversion and NO to quit | """)
         if next.lower()=="yes":
-            continue
+            pass
         else:
-            break
+            quit()
 
-def PoundException:
+def PoundException():
     try:
         amount = float(input(" You are converting: N"))
-    except TypeError:
-        print("Wrong input. Try again!")
+    except ValueError:
+        print("\n>> Error: Wrong input. Try again!")
         PoundException()
     else:
         convert = amount/one_Npound
@@ -30,22 +32,23 @@ def PoundException:
     Do you want to perform another conversion?
     Enter YES to perform another conversion and NO to quit | """)
         if next.lower()=="yes":
-            continue
+            pass
         else:
-            break
+            quit()
             
 one_Npound = 1236.00
 one_Pnaira = 1198.85
 
-print('\nNaira ~ Pound: Enter symbol £.\nPound ~ Naira: Enter symbol N.\n')
+
 while True:
     currency = input(" Enter currency | ")
     if currency == "£":
         print(' £1 = N1236.00')
-        PoundException
+        PoundException()
     elif currency == "N":
         print(' £1 = N1198.85')
         NairaException()
     else:
-        print(">>\tError: Invalid currency. Try again!")
-        print('\nNaira ~ Pound: Enter symbol £.\nPound ~ Naira: Enter symbol N.\n')
+        print(">> Error: Unsupported currency. Try again!")
+        #print('\nNaira ~ Pound: Enter symbol £.\nPound ~ Naira: Enter symbol N.\n')
+
