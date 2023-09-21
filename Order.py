@@ -17,6 +17,29 @@ HMM.c: How much more
 SS.c: Skip slot \n
         ''')
 
+    def self_collect(self):
+        try:
+            assert self.self_collect in ['yes', 'no']
+        except AssertionError:
+            print(' >>\tInvalid input [ '+self.self_collect+ ' ]. Enter yes or no')
+            self.self_collect = input('Self Collect? ')
+            InventorySys.self_collect(self)
+        else:
+            try:
+                if len(self.stacklist)==0:
+                    raise Exception
+            except Exception:
+                self.no_work=no_work=input(' >>\tNo work available, continue to say ready: ')
+                while True:
+                    if no_work=='ready':
+                        InventorySys.Queuing(self)
+                    elif no_work == 'SA.c':
+                       self.no_work=no_work=input(' >>\tNo work available, continue to say ready: ') 
+                    else:
+                        print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+            else:
+                Stack.Aisle(self)
+
     def RLP_recur(self):
         aisle_data = self.prod[self.knockoff]
         aisle_data0 = aisle_data[0:11]
@@ -109,8 +132,7 @@ SS.c: Skip slot \n
                 if Printer == 'RLP.c':
                     InventorySys.RLP(self)
                 elif Printer == 'SA.c':
-                    print('Picking complete!')
-                    Printer = input('Printer? | ')
+                    pass
                 else:
                     while True:
                         select_Printer = input(Printer+'? TIMELESS '+Printer+'? correct? | ')
@@ -166,7 +188,7 @@ SS.c: Skip slot \n
         print()
         
         self.stacklist=input('Load Assignment: | ')
-        self.self_collect = self_collect = input('Self Collect? | ')
+        self.self_collect =  input('Self Collect? | ')
         print()
         self.stacklist = self.stacklist.split()
         
@@ -195,27 +217,7 @@ SS.c: Skip slot \n
             except Exception:
                 print(' >>\tQuantity must be > zero. Try again!')
                 InventorySys.Queuing(self)
-
-        try:
-            assert self.self_collect in ['yes', 'no']
-        except AssertionError:
-            print(' >>\tInvalid [ '+self_collect+ ' ]. Enter yes or no')
-            self.self_collect = input('Self Collect? ')
-        else:
-            try:
-                if len(self.stacklist)==0:
-                    raise Exception
-            except Exception:
-                self.no_work=no_work=input(' >>\tNo work available, continue to say ready: ')
-                while True:
-                    if no_work=='ready':
-                        InventorySys.Queuing(self)
-                    elif no_work == 'SA.c':
-                       self.no_work=no_work=input(' >>\tNo work available, continue to say ready: ') 
-                    else:
-                        print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-            else:
-                Stack.Aisle(self)
+        InventorySys.self_collect(self)
 
 
 class Stack:
@@ -487,38 +489,42 @@ class Stack:
         while True:
             self.say_qty = input('Quantity? | ')
 
-            if self.say_qty == 'SA.c':
-                print('Pick '+str(self.quantity)+' each. ', end = '')
-                print(self.Item_description)
-                self.say_qty = input('Quantity? | ')
-            
-
-            if int(self.say_qty) == int(self.quantity):
-                Stack.Keg_repeater(self)                                                    
-            elif int(self.say_qty) > int(self.quantity):
-                self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
-                                        str(self.quantity), str(self.quantity), self.Item_description)
-                print(self.print_err)
-                print()
-            
-            else:
-                self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                 '.\n\t Is this a short product? | ')
-                if short_prod=='yes':
-                    Stack.Keg_repeater(self)
-                    InventorySys.Printer(self)
-                    break
-                elif short_prod == 'no':
-                    pass
-                elif short_prod == 'HMM.c':
-                    InventorySys.HMM(self)
-                    print()
-                elif short_prod == 'SA.c':
-                    self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                 '.\n\t Is this a short product? | ')
+            try:
+                if self.say_qty == 'SA.c':
+                    print('Pick '+str(self.quantity)+' each. ', end = '')
+                    print(self.Item_description)
                 else:
-                    print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-
+                    raise ValueError
+            except ValueError:
+                try:
+                        int(self.say_qty) == self.quantity
+                except ValueError:
+                        print('>>\t Error: Wrong input! Try again\n')
+                else:
+                    if int(self.say_qty) == int(self.quantity):
+                        Stack.Keg_repeater(self)                                                    
+                    elif int(self.say_qty) > int(self.quantity):
+                        self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
+                                                str(self.quantity), str(self.quantity), self.Item_description)
+                        print(self.print_err)
+                        print()
+                    else:
+                        self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
+                                                        '.\n\t Is this a short product? | ')
+                        if short_prod=='yes':
+                            Stack.Keg_repeater(self)
+                            InventorySys.Printer(self)
+                            break
+                        elif short_prod == 'no':
+                            pass
+                        elif short_prod == 'HMM.c':
+                            InventorySys.HMM(self)
+                            print()
+                        elif short_prod == 'SA.c':
+                            self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
+                                                        '.\n\t Is this a short product? | ')
+                        else:
+                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
 
     def Bottles(self):
         self.knockoff = knockoff = self.knockoff
@@ -538,32 +544,36 @@ class Stack:
                 else:
                     raise ValueError
             except ValueError:
-                if int(self.say_qty) == self.quantity:
-                    Stack.Bottle_ID(self) 
-                elif int(self.say_qty) > self.quantity:
-                    self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
-                                            str(self.quantity), str(self.quantity), self.Item_description)
-                    print(self.print_err)
-                    print()
-
+                try:
+                    int(self.say_qty) == self.quantity
+                except ValueError:
+                    print('>>\t Error: Wrong input! Try again\n')
                 else:
-                    self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                    '.\n\t Is this a short product? | ')
-                    print()
-                    if short_prod=='yes':
-                        Stack.Bottle_ID(self)
-                        InventorySys.Printer(self)
-                        break
-                    elif short_prod=='no':
-                        pass
-                    elif short_prod == 'HMM.c':
-                        InventorySys.HMM(self)
+                    if int(self.say_qty) == self.quantity:
+                        Stack.Bottle_ID(self) 
+                    elif int(self.say_qty) > self.quantity:
+                        self.print_err = ' >>\tYou said {}, I only asked for {}.\n\tTry again, pick {} each.\n\t{}'.format(str(self.say_qty),
+                                                str(self.quantity), str(self.quantity), self.Item_description)
+                        print(self.print_err)
                         print()
-                    elif short_prod == 'SA.c':
-                        self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
-                                                    '.\n\t Is this a short product? | ')
                     else:
-                        print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+                        self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
+                                                        '.\n\t Is this a short product? | ')
+                        print()
+                        if short_prod=='yes':
+                            Stack.Bottle_ID(self)
+                            InventorySys.Printer(self)
+                            break
+                        elif short_prod=='no':
+                            pass
+                        elif short_prod == 'HMM.c':
+                            InventorySys.HMM(self)
+                            print()
+                        elif short_prod == 'SA.c':
+                            self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
+                                                        '.\n\t Is this a short product? | ')
+                        else:
+                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             
             
 
