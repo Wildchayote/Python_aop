@@ -2,10 +2,22 @@ from random import choice
 from datetime import datetime
 import copy
 import math
+from os import strerror
 
 
 
 class InventorySys:
+
+    def Log(self):
+        try:
+            file1 = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
+            file1.write(str(self.value+ ' : ' +self.timestampStr)+'\n')            # write directly
+            file2 = open('C:\\Users\\labod\\Desktop\\knockoff.xls', "a")
+            file2.write(str(self.data))
+            file1.close()
+            file2.close()
+        except IOError as e:
+            print("I/O error occurred: ", strerror(e.errno))
        
     def help(self):
         print('''\n
@@ -99,6 +111,7 @@ SS.c: Skip slot \n
                         self.tally != None
                         del self.newstacklist
                         del self.knockoff
+                        InventorySys.Log(self)
                         InventorySys.Queuing(self)
                     elif next_assignment == 'sign off':
                         while True:
@@ -323,7 +336,7 @@ class Stack:
                     else:
                         Stack.verify_bottle(self)
                 
-                if self.uprod == 'Aisle AA':                            #Kegs
+                if self.uprod == 'Aisle AA':                                #Kegs
                     self.status = input(self.uprod+': ')
 
                     while True:
@@ -713,7 +726,9 @@ class Setup:
     def Log_timestamp(self):
         timestampStr = datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")
         print(self.value+ ' :\t' +timestampStr)
-    
+        InventorySys.Log(self)
+        #Setup.Config(self)
+
     def Config(self):
         self.match = match = {'Bashir': 'Bashir Sanni', 'Damen': 'Damen Butters', 'Chandler': 'Chandler Morrisons', 
                             'Charlie': 'Charlie Dyer', 'Sean': 'Sean Turner', 'Josh': 'Josh Darley'}
@@ -730,9 +745,9 @@ class Setup:
             else:
                 print(' >>\t Unknown Operator. Try again!\n')
 
-#setup = Setup()        
-#setup.Config()
-#setup.Log_timestamp()
+setup = Setup()        
+setup.Config()
+setup.Log_timestamp()
 
 aop = InventorySys()
 aop.Queuing()
