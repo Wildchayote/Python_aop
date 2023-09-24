@@ -1,105 +1,122 @@
 from random import random, choice
 import time
+import pandas as pd
+import openpyxl
 
-print()
-marks=0
-marks1=0
+class Atlas:
+    data1 =[]
+    data2 =[]
+    def exception_dial(self):
 
-try:
-    questions=int(input("How many questions would you like to try? "))
-    print()
-except (KeyboardInterrupt, ValueError):
-    print("\n\t[error!] Something went wrong!\n")
-    try:
-        questions=int(input("\t[error!] Try again! Enter an integer > 0:  "))
         print()
-    except:
-        print()
+        self.marks=0
+        self.marks1=0
+        self.name = input('Name: ')
         try:
-            questions=int(input("\t[error!] Enter an integer > 0:   "))
-        except:
+            questions=int(input("How many questions would you like to try? "))
             print()
-            try:
-                questions=int(input("\t[error!!] Enter an integer value > 0:   "))
-                print()
-            except:
-                print("\n\t[error!!!] Logging you off dumbass! Relaunch app to start allover.\n")
-                exit()
-
-while True:
-    world_atlas = {"nigeria": "ABUJA", "togo": "LOME", "uk": "LONDON","scotland": "EDINBURG","wales": "CARDIFF","germany": "BERLIN",
-                    "benin": "PORT NOVO","ghana": "ACCRA","cote d'ivoire": "YAMOUSSOUKRO","mali": "BAMAKO","niger": "NIAMEY","chad": 
-                    "N'JAMENA","burkina faso": "OAGADOUGOU","senegal": "DAKAR","liberia": "MONROVIA","sierra leone": "FREETOWN","gabon": 
-                    "LIBREVILLE","guinea": "CONAKRY","cape verde": "PRAIA","western sahara": "AL-AIUN","mauritania": "NOUAKCHOTT","morocco":
-                    "RABAT","algeria": "ALGIERS","libya": "TRIPOLI","tunisia": "TUNIS","egypt": "CAIRO","sudan": "KHARTOUM","south sudan": 
-                    "JUBA", "eritrea": "ASMARA","djibouti": "DJIBOUTI","somalia": "MOGADISHU","ethiopia": "ADISABABA","rwanda": "KIGALI",
-                    "uganda": "KAMPALA","burundi": "BUJUMBURA","tanzania": "DODOMA","dr congo": "KINSHASA","congo": "BRAZAVILLE","car": 
-                    "BANGUI","gambia": "BANJUL","guinea bissau": "BISSAU","cameroon": "YAOUNDE","angola": "LUANDA","zambia": "LUSAKA",
-                    "namibia": "WINDHOEK","seychelles": "VICTORIA","mozambique": "MAPUTO","kenya": "NAIROBI","malawi": "LILONGWE","zimbabwe":
-                    "HARARE","mauritius": "PORT-LOUIS","comoros": "MORONI","lesotho": "MASERU","swaziland": "MBABANE","south africa": 
-                    "CAPETOWN","madagascar": "ANTANANARIVO","botswana": "GABORONE","equatorial guinea": "MALABO","sao tome de principe": 
-                    "SAO TOME","france": "PARIS","spain": "MADRID","italy": "ROME","portugal": "LISBON","belgium": "BRUSSELS","poland": 
-                    "WARSAW","netherlands": "AMSTERDAM","estonia": "TALLINN","latvia": "RIGA","lithuania": "VILNIUS","luxemborg": "LUXEMBORG",
-                    "denmark": "COPENHAGEN","norway": "OSLO","finland": "HELSINKI","sweden": "STOCKHOLM","ukraine": "KIEV","malta": "VALLETTA",
-                    "albania": "TIRANA","slovakia": "BRATISLAVA","slovenia": "LJUBLJANA","czech republic": "PRAGUE","switzerland": "BERN",
-                    "vatican city": "HOLY SEE","bulgaria": "SOFIA","romania": "BUCHAREST","hungary": "BUDAPEST","cyprus": "NICOSIA",
-                    "greece": "ATHENS","austria": "VIENNA","croatia": "ZAGREB","macedonia": "SKOPJE","serbia": "BELGRADE","monaco": "MONACO",
-                    "iceland": "REKJAVIK","armenia": "YEREVAN","azerbaijan": "BAKU","moldova": "CHISINAU","belarus": "MINSK","ireland": 
-                    "DUBLIN","andorra": "ANDORRA LA VELLA","bosnia": "SARAJEVO","montenegro": "PODGORICA","san marino": "SAN MARINO",
-                    "liechtenstein": "LIECHTENSTEIN","brazil": "BRASILIA","paraguay": "ASUNCION","uruguay": "MONTEVIDEO","columbia": "BOGOTA",
-                    "peru": "LIMA","ecuador": "QUITTO","argentina": "BUENOS AIRES","bolivia": "SUCRE","venezuela": "CARACAS","suriname": 
-                    "PARAMARIBO","guyana": "GEORGETOWN","chile": "SANTIAGO DE CHILE","trinidad and tobago": "PORT OF SPAIN","panama": 
-                    "PANAMA CITY","honduras": "TEGUCIGALPA","el savaldor": "SAN SAVALDOR","nicaragua": "MANAGUA","mexico": "MEXICO CITY",
-                    "guatemala": "GUATEMALA CITY","cuba": "HAVANA","bahamas": "NASSAU","st kitts and nevis": "BASSETERRE","haiti": 
-                    "PORT-AU-PRINCE","jamaica": "KINGSTON","grenada": "ST GEORGE'S","costa rica": "SAN JOSE","dominican republic": 
-                    "SANTO DOMINIGO","greenland": "NUUK","usa": "WASHINGTON DC","canada": "TORONTO","belize": "BELMOPAN","barbados": 
-                    "BRIDGETOWN","st lucia": "CASTRIES","antigua and barbuda": "ST JOHN'S","dominica": "ROSEAU","russia": "MOSCOW","china":
-                    "BEIJIN","mongolia": "ULAAN BAATAR","uzbekistan": "TASHKENT","turkmenistan": "ASHGABAT","kazakhstan": "ASTANA","krygyzstan":
-                    "BISHIKEK","tajikistan": "DUSHANBE","syria": "DAMASCUS","pakistan": "ISLAMABAD","turkey": "ANKARA","afghanistan": "KABUL",
-                    "iran": "TEHRAN","iraq": "BAGHDAD","israel": "TEL AVIV","palestine": "JERUSALEM","lebanon": "BEIRUT","jordan": "AMMAN",
-                    "india": "NEW DELHI","sri lanka": "COLOMBO","maldives": "MALE","south korea": "SEOUL","north korea": "PYONGYANG",
-                    "japan": "TOKYO","bangladesh": "DHAKA","nepal": "KATHMANDU","bhutan": "THIMHPU","thailand": "BANGKOK","laos": "HANNOI",
-                    "vietnam": "LAOS","cambodia": "PHNOM PHEN","brunei": "BANDAR SERI BEGAWAN","malaysia": "KUALA LUMPUR","indonesia": "JAKARTA",
-                    "singapore": "SINGAPORE","taiwan": "TAI PEI","philippines": "MANILA","new guinea": "PORT MORESBY","australia": "CANBERRA",
-                    "new zealand": "WELLINGTON","oman": "MUSCAT","saudi arabia": "RIYAHD","kuwait": "KUWAIT","yemen": "SANA'A","qatar": "DOHA",
-                    "bahrain":"BAHRAIN","uae": "ABU DHABI","myanmar": "NAYPYIDAW","east timor": "DILI","fiji": "SUVA","solomon island":
-                    "HONIARA","micronesia": "PALIKIR","tuvalu": "FUNAFUTI","vanuatu": "PORT VILA","kiribati": "TARAWA","marshall islands": 
-                    "MAJURO","nauru": "YAREN","palau": "NGERULMUD"}
-    
-    print("Fab!", questions,"questions,...Let's go!")
-    for i in range(questions):
-        keys = list(world_atlas)
-        country = choice(keys)
-        counter = marks + marks1 
-
-        print("\nQuestion",counter+1,":")
-        print("What is the capital of",country.upper(),"?")
-        answer=input("Answer: ").upper()
-        
-        if answer==world_atlas[country]:
-            print(">>\tCorrect!")
-            marks+=1
-            time.sleep(1)
+        except (KeyboardInterrupt, ValueError):
+            print("\n\t[error!] Something went wrong!\n")
+            Atlas.exception_dial(self)
         else:
-            print(">>\tWrong!:", end = '')
-            print("\tThe capital of",country.title(), "is", world_atlas[country].title())
-            marks1+=1
-            time.sleep(1)
+            pass
 
-    print()
-    print('*** Loading result...')
-    time.sleep(3)
-    print("You scored ",marks,'/',questions)
-    
-    score = marks / questions
-    if marks < questions*.5:
-        time.sleep(2)
-        print("\nYou got",round(score*100,2),"%")
-        print("You failed the quiz!...relaunch app to try again!\n".center(500))
-        exit()
-    else:
-        marks>=questions*.5
-        time.sleep(2)
-        print("\nCongratulation!  You've passed the quiz... you got",round(score*100,2),"%\n")
-        exit()
-   
+        while True:
+            
+            world_atlas = {"nigeria": "ABUJA", "togo": "LOME", "uk": "LONDON","scotland": "EDINBURG","wales": "CARDIFF","germany": "BERLIN",
+                            "benin": "PORT NOVO","ghana": "ACCRA","cote d'ivoire": "YAMOUSSOUKRO","mali": "BAMAKO","niger": "NIAMEY","chad": 
+                            "N'JAMENA","burkina faso": "OAGADOUGOU","senegal": "DAKAR","liberia": "MONROVIA","sierra leone": "FREETOWN","gabon": 
+                            "LIBREVILLE","guinea": "CONAKRY","cape verde": "PRAIA","western sahara": "AL-AIUN","mauritania": "NOUAKCHOTT","morocco":
+                            "RABAT","algeria": "ALGIERS","libya": "TRIPOLI","tunisia": "TUNIS","egypt": "CAIRO","sudan": "KHARTOUM","south sudan": 
+                            "JUBA", "eritrea": "ASMARA","djibouti": "DJIBOUTI","somalia": "MOGADISHU","ethiopia": "ADISABABA","rwanda": "KIGALI",
+                            "uganda": "KAMPALA","burundi": "BUJUMBURA","tanzania": "DODOMA","dr congo": "KINSHASA","congo": "BRAZAVILLE","car": 
+                            "BANGUI","gambia": "BANJUL","guinea bissau": "BISSAU","cameroon": "YAOUNDE","angola": "LUANDA","zambia": "LUSAKA",
+                            "namibia": "WINDHOEK","seychelles": "VICTORIA","mozambique": "MAPUTO","kenya": "NAIROBI","malawi": "LILONGWE","zimbabwe":
+                            "HARARE","mauritius": "PORT-LOUIS","comoros": "MORONI","lesotho": "MASERU","swaziland": "MBABANE","south africa": 
+                            "CAPETOWN","madagascar": "ANTANANARIVO","botswana": "GABORONE","equatorial guinea": "MALABO","sao tome de principe": 
+                            "SAO TOME","france": "PARIS","spain": "MADRID","italy": "ROME","portugal": "LISBON","belgium": "BRUSSELS","poland": 
+                            "WARSAW","netherlands": "AMSTERDAM","estonia": "TALLINN","latvia": "RIGA","lithuania": "VILNIUS","luxemborg": "LUXEMBORG",
+                            "denmark": "COPENHAGEN","norway": "OSLO","finland": "HELSINKI","sweden": "STOCKHOLM","ukraine": "KIEV","malta": "VALLETTA",
+                            "albania": "TIRANA","slovakia": "BRATISLAVA","slovenia": "LJUBLJANA","czech republic": "PRAGUE","switzerland": "BERN",
+                            "vatican city": "HOLY SEE","bulgaria": "SOFIA","romania": "BUCHAREST","hungary": "BUDAPEST","cyprus": "NICOSIA",
+                            "greece": "ATHENS","austria": "VIENNA","croatia": "ZAGREB","macedonia": "SKOPJE","serbia": "BELGRADE","monaco": "MONACO",
+                            "iceland": "REKJAVIK","armenia": "YEREVAN","azerbaijan": "BAKU","moldova": "CHISINAU","belarus": "MINSK","ireland": 
+                            "DUBLIN","andorra": "ANDORRA LA VELLA","bosnia": "SARAJEVO","montenegro": "PODGORICA","san marino": "SAN MARINO",
+                            "liechtenstein": "LIECHTENSTEIN","brazil": "BRASILIA","paraguay": "ASUNCION","uruguay": "MONTEVIDEO","columbia": "BOGOTA",
+                            "peru": "LIMA","ecuador": "QUITTO","argentina": "BUENOS AIRES","bolivia": "SUCRE","venezuela": "CARACAS","suriname": 
+                            "PARAMARIBO","guyana": "GEORGETOWN","chile": "SANTIAGO DE CHILE","trinidad and tobago": "PORT OF SPAIN","panama": 
+                            "PANAMA CITY","honduras": "TEGUCIGALPA","el savaldor": "SAN SAVALDOR","nicaragua": "MANAGUA","mexico": "MEXICO CITY",
+                            "guatemala": "GUATEMALA CITY","cuba": "HAVANA","bahamas": "NASSAU","st kitts and nevis": "BASSETERRE","haiti": 
+                            "PORT-AU-PRINCE","jamaica": "KINGSTON","grenada": "ST GEORGE'S","costa rica": "SAN JOSE","dominican republic": 
+                            "SANTO DOMINIGO","greenland": "NUUK","usa": "WASHINGTON DC","canada": "TORONTO","belize": "BELMOPAN","barbados": 
+                            "BRIDGETOWN","st lucia": "CASTRIES","antigua and barbuda": "ST JOHN'S","dominica": "ROSEAU","russia": "MOSCOW","china":
+                            "BEIJIN","mongolia": "ULAAN BAATAR","uzbekistan": "TASHKENT","turkmenistan": "ASHGABAT","kazakhstan": "ASTANA","krygyzstan":
+                            "BISHIKEK","tajikistan": "DUSHANBE","syria": "DAMASCUS","pakistan": "ISLAMABAD","turkey": "ANKARA","afghanistan": "KABUL",
+                            "iran": "TEHRAN","iraq": "BAGHDAD","israel": "TEL AVIV","palestine": "JERUSALEM","lebanon": "BEIRUT","jordan": "AMMAN",
+                            "india": "NEW DELHI","sri lanka": "COLOMBO","maldives": "MALE","south korea": "SEOUL","north korea": "PYONGYANG",
+                            "japan": "TOKYO","bangladesh": "DHAKA","nepal": "KATHMANDU","bhutan": "THIMHPU","thailand": "BANGKOK","laos": "HANNOI",
+                            "vietnam": "LAOS","cambodia": "PHNOM PHEN","brunei": "BANDAR SERI BEGAWAN","malaysia": "KUALA LUMPUR","indonesia": "JAKARTA",
+                            "singapore": "SINGAPORE","taiwan": "TAI PEI","philippines": "MANILA","new guinea": "PORT MORESBY","australia": "CANBERRA",
+                            "new zealand": "WELLINGTON","oman": "MUSCAT","saudi arabia": "RIYAHD","kuwait": "KUWAIT","yemen": "SANA'A","qatar": "DOHA",
+                            "bahrain":"BAHRAIN","uae": "ABU DHABI","myanmar": "NAYPYIDAW","east timor": "DILI","fiji": "SUVA","solomon island":
+                            "HONIARA","micronesia": "PALIKIR","tuvalu": "FUNAFUTI","vanuatu": "PORT VILA","kiribati": "TARAWA","marshall islands": 
+                            "MAJURO","nauru": "YAREN","palau": "NGERULMUD"}
+            
+            print("Fab!", questions,"questions,...Let's go!")
+            for i in range(questions):
+                keys = list(world_atlas)
+                country = choice(keys)
+                counter = self.marks + self.marks1 
+
+                print("\nQuestion",counter+1,":")
+                print("What is the capital of",country.upper(),"?")
+                answer=input("Answer: ").upper()
+                
+                if answer==world_atlas[country]:
+                    print(">>\tCorrect!")
+                    self.marks+=1
+                    time.sleep(1)
+                else:
+                    print(">>\tWrong!:", end = '')
+                    print("\tThe capital of",country.title(), "is", world_atlas[country].title())
+                    self.marks1+=1
+                    time.sleep(1)
+
+            print()
+            print('*** Loading result...')
+            time.sleep(3)
+            print("You scored ",self.marks,'/',questions)
+            
+            score = self.marks / questions
+            if self.marks < questions*.5:
+                time.sleep(2)
+                print("\nYou got",round(score*100,2),"%")
+                print("You failed the quiz!...relaunch app to try again!\n")
+                Atlas.exception_dial(self)
+            else:
+                self.marks>=questions*.5
+                time.sleep(2)
+                self.result = round(score*100,2)
+                print("\nCongratulation!  You've passed the quiz... you got",self.result,"%\n")
+                Atlas.data1.append(self.name)
+                Atlas.data2.append(str(self.result))
+                Atlas.save(self)
+                Atlas.exception_dial(self)
+
+    def save(self):
+        self.save = input('Save: ')
+        if self.save == 'save':
+            self.res = dict(zip(Atlas.data1, Atlas.data2))
+            print(self.res)
+            Atlas.Log(self)
+            exit()
+        else:
+            pass
+
+    def Log(self):
+        df = pd.DataFrame(self.res, index = ['Result'])
+        df.to_excel('testing.xlsx', sheet_name= 'Pandas_Demo', index=True, header=True)
+
+atlas = Atlas()
+atlas.exception_dial()
+
