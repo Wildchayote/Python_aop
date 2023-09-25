@@ -6,6 +6,7 @@ import openpyxl
 class Atlas:
     data1 =[]
     data2 =[]
+    data3 = []
     def exception_dial(self):
 
         print()
@@ -99,7 +100,13 @@ class Atlas:
                 self.result = round(score*100,2)
                 print("\nCongratulation!  You've passed the quiz... you got",self.result,"%\n")
                 Atlas.data1.append(self.name)
-                Atlas.data2.append(str(self.result))
+                if self.name == "Bashir":
+                    Atlas.data2.append(str(self.result))
+                elif sef.name == "Deola":
+                    Atlas.data3.append(str(self.result))
+                else:
+                    print("Not a student in this school. Try again")
+                    
                 Atlas.save(self)
                 Atlas.exception_dial(self)
 
