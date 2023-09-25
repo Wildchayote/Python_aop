@@ -3,16 +3,19 @@ import time
 import pandas as pd
 import openpyxl
 
+
+
+
 class Atlas:
     data1 =[]
     data2 =[]
-    data3 = []
-    def exception_dial(self):
+    data3 =[]
 
+    def exception_dial(self):
         print()
         self.marks=0
         self.marks1=0
-        self.name = input('Name: ')
+
         try:
             questions=int(input("How many questions would you like to try? "))
             print()
@@ -21,7 +24,7 @@ class Atlas:
             Atlas.exception_dial(self)
         else:
             pass
-
+        
         while True:
             
             world_atlas = {"nigeria": "ABUJA", "togo": "LOME", "uk": "LONDON","scotland": "EDINBURG","wales": "CARDIFF","germany": "BERLIN",
@@ -64,66 +67,99 @@ class Atlas:
                             "MAJURO","nauru": "YAREN","palau": "NGERULMUD"}
             
             print("Fab!", questions,"questions,...Let's go!")
-            for i in range(questions):
-                keys = list(world_atlas)
-                country = choice(keys)
-                counter = self.marks + self.marks1 
-
-                print("\nQuestion",counter+1,":")
-                print("What is the capital of",country.upper(),"?")
-                answer=input("Answer: ").upper()
-                
-                if answer==world_atlas[country]:
-                    print(">>\tCorrect!")
-                    self.marks+=1
-                    time.sleep(1)
+            for attempt in range(self.attempts*2):
+                if attempt%2 == 0:
+                    print('\tDEOLA\'S TURN\n')
                 else:
-                    print(">>\tWrong!:", end = '')
-                    print("\tThe capital of",country.title(), "is", world_atlas[country].title())
-                    self.marks1+=1
-                    time.sleep(1)
-
-            print()
-            print('*** Loading result...')
-            time.sleep(3)
-            print("You scored ",self.marks,'/',questions)
-            
-            score = self.marks / questions
-            if self.marks < questions*.5:
-                time.sleep(2)
-                print("\nYou got",round(score*100,2),"%")
-                print("You failed the quiz!...relaunch app to try again!\n")
-                Atlas.exception_dial(self)
-            else:
-                self.marks>=questions*.5
-                time.sleep(2)
-                self.result = round(score*100,2)
-                print("\nCongratulation!  You've passed the quiz... you got",self.result,"%\n")
-                Atlas.data1.append(self.name)
-                if self.name == "Bashir":
-                    Atlas.data2.append(str(self.result))
-                elif sef.name == "Deola":
-                    Atlas.data3.append(str(self.result))
-                else:
-                    print("Not a student in this school. Try again")
+                    print('\tBASHIR\'S TURN\n')
                     
-                Atlas.save(self)
-                Atlas.exception_dial(self)
+                for i in range(questions):
+                    keys = list(world_atlas)
+                    country = choice(keys)
+                    counter = self.marks + self.marks1 
+
+                    print("\nQuestion",counter+1,":")
+                    print("What is the capital of",country.upper(),"|")
+                    answer=input("Answer: ").upper()
+                    
+                    if answer==world_atlas[country]:
+                        print(">>\tCorrect!")
+                        self.marks+=1
+                        time.sleep(1)
+                    else:
+                        print(">>\tWrong!:", end = '')
+                        print("\tThe capital of",country.title(), "is", world_atlas[country].title())
+                        self.marks1+=1
+                        time.sleep(1)
+
+                print()
+                print('*** Loading result...')
+                time.sleep(2)
+                print("You scored ",self.marks,'/',questions)
+                
+                score = self.marks / questions
+                if self.marks < questions*.5:
+                    time.sleep(2)
+                    print("\nYou scored",round(score*100,2),"%")
+                    print("You failed the quiz!...relaunch app to try again!\n")
+                    Atlas.Data_job(self)
+                    Atlas.exception_dial(self)
+                else:
+                    self.marks>=questions*.5
+                    time.sleep(2)
+                    self.result = round(score*100,2)
+                    print("\nCongratulation!  You've passed the quiz... you scored",self.result,"%\n")
+                    Atlas.Data_job(self)
+                    Atlas.exception_dial(self)
 
     def save(self):
         self.save = input('Save: ')
         if self.save == 'save':
-            self.res = dict(zip(Atlas.data1, Atlas.data2))
+            self.res = dict(zip(Atlas.data1, self.ress))
             print(self.res)
             Atlas.Log(self)
             exit()
         else:
+            Atlas.exception_dial(self)
+
+
+    def Data_job(self):
+        while True:
+            self.name = input('Username: ')
+            if self.name == "Bashir":
+                Atlas.data1.append(self.name)
+                Atlas.data2.append(str(self.result))
+                self.ress = [Atlas.data2, Atlas.data3]
+                Atlas.save(self)
+            elif self.name == "Deola":
+                Atlas.data1.append(self.name)
+                Atlas.data3.append(str(self.result))
+                self.ress = [Atlas.data2, Atlas.data3]
+                Atlas.save(self)
+            else:
+                print("Error: Name not registered. Try again!")
+            
+                    
+        
+    def Log(self):
+        start_row = 0
+        with pd.ExcelWriter("testing.xlsx", engine="openpyxl") as writer:
+            df = pd.DataFrame(self.res)
+            df.to_excel(writer, sheet_name = 'Pandas_Demo', startrow=start_row, index=True)
+            writer.save()
+
+class Round_exce(Atlas):
+    def rounds(self):
+        try:
+            self.attempts=int(input("How many rounds would you like to go? "))
+            print()
+        except (KeyboardInterrupt, ValueError):
+            print("\n\t[error!] Something went wrong!\n")
+            Atlas.rounds(self)
+        else:
             pass
 
-    def Log(self):
-        df = pd.DataFrame(self.res, index = ['Result'])
-        df.to_excel('testing.xlsx', sheet_name= 'Pandas_Demo', index=True, header=True)
-
-atlas = Atlas()
-atlas.exception_dial()
-
+raund = Round_exce()
+print()
+raund.rounds()
+raund.exception_dial()
