@@ -6,9 +6,9 @@ import openpyxl
 
 
 class Atlas:
-    data1 =[]
-    data2 =[]
-    data3 =[]
+    name_list =[]
+    result_list1 =[]
+    result_list2 =[]
     counter = 0
     def exception_dial(self):
         print()
@@ -66,7 +66,6 @@ class Atlas:
                             "MAJURO","nauru": "YAREN","palau": "NGERULMUD"}
             
             print("Fab!", questions,"questions,...Let's go!")
-            print(self.attempts*2)
             for i in range(questions):
                 keys = list(world_atlas)
                 country = choice(keys)
@@ -107,7 +106,7 @@ class Atlas:
                 Atlas.exception_dial(self)
             
     def save(self):
-        self.res = dict(zip(Atlas.data1, self.ress))
+        self.res = dict(zip(Atlas.name_list, self.ress))
         print(self.res)
         Atlas.Log(self)
         exit()
@@ -121,25 +120,21 @@ class Atlas:
             Atlas.exception_dial(self)
         else:
             if self.name == "Bashir":
-                Atlas.data1.append(self.name)
-                Atlas.data2.append(str(self.result))
-                self.ress = [Atlas.data2, Atlas.data3]
-                Atlas.counter+=1
-                if Atlas.counter == self.attempts*2:
-                    Atlas.save(self)
-                else:
-                    pass
+                Atlas.result_list1.append(str(self.result))
+                Atlas.Kounter(self)
             elif self.name == "Deola":
-                Atlas.data1.append(self.name)
-                Atlas.data3.append(str(self.result))
-                self.ress = [Atlas.data2, Atlas.data3]
-                Atlas.counter+=1
-                if Atlas.counter == self.attempts*2:
-                    Atlas.save(self)
-                else:
-                    pass
+                Atlas.result_list2.append(str(self.result))
+                Atlas.Kounter(self)
         
-              
+    def Kounter(self):
+        Atlas.name_list.append(self.name)
+        self.ress = [Atlas.result_list1, Atlas.result_list2]
+        Atlas.counter+=1
+        if Atlas.counter == self.attempts*2:
+            Atlas.save(self)
+        else:
+            pass
+        
     def Log(self):
         start_row = 0
         with pd.ExcelWriter("testing.xlsx", engine="openpyxl") as writer:
