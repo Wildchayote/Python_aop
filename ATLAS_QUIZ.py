@@ -95,14 +95,19 @@ class Atlas:
                 time.sleep(2)
                 print("\nYou scored",round(score*100,2),"%")
                 print("You failed the quiz!...relaunch app to try again!\n")
-                Atlas.Data_job(self)
+                print('Launch: '+str(Atlas.counter)+ ' | '+self.name+'\'s turn!')
+                Round_exce.Data_job(self)
                 Atlas.exception_dial(self)
             else:
                 self.marks>=questions*.5
                 time.sleep(2)
                 self.result = round(score*100,2)
                 print("\nCongratulation!  You've passed the quiz... you scored",self.result,"%\n")
-                Atlas.Data_job(self)
+                if self.name == 'Bashir':
+                    print('Launch: '+str(Atlas.counter)+ ' | Deola\'s turn!')
+                elif self.name == 'Deola':
+                    print('Launch: '+str(Atlas.counter)+ ' | Bashir\'s turn!')
+                Round_exce.Data_job(self)
                 Atlas.exception_dial(self)
             
     def save(self):
@@ -111,22 +116,7 @@ class Atlas:
         Atlas.Log(self)
         exit()
         
-    def Data_job(self):
-        self.name = input('Username: ')
-        try:
-            assert self.name in ['Bashir', 'Deola']
-        except AssertionError:
-            print("Error: Name not registered. Try again!")
-            Atlas.exception_dial(self)
-        else:
-            if self.name == "Bashir":
-                Atlas.result_list1.append(str(self.result))
-                Atlas.Kounter(self)
-            elif self.name == "Deola":
-                Atlas.result_list2.append(str(self.result))
-                Atlas.Kounter(self)
-        
-    def Kounter(self):
+    def Kounter(self):        
         Atlas.name_list.append(self.name)
         self.ress = [Atlas.result_list1, Atlas.result_list2]
         Atlas.counter+=1
@@ -143,17 +133,44 @@ class Atlas:
             writer.save()
 
 class Round_exce(Atlas):
+    
+    def Data_job(self):
+        self.name = input('Username: ')
+        try:
+            assert self.name in ['Bashir', 'Deola']
+        except AssertionError:
+            print("Error: Name not registered. Try again!")
+            Round_exce.Data_job(self)
+        else:
+            if self.name == "Bashir":
+                try:
+                    self.result
+                except AttributeError:
+                    Atlas.exception_dial(self)
+                else:
+                    Atlas.result_list1.append(int(self.result))
+                    Atlas.Kounter(self)
+            else:
+                try:
+                    self.result
+                except AttributeError:
+                    Atlas.exception_dial(self)
+                else:
+                    Atlas.result_list2.append(int(self.result))
+                    Atlas.Kounter(self)
+
     def rounds(self):
         try:
             self.attempts=int(input("How many rounds would you like to go? "))
             print()
         except (KeyboardInterrupt, ValueError):
             print("\n\t[error!] Something went wrong!\n")
-            Atlas.rounds(self)
+            Round_exce.rounds(self)
         else:
             pass
 
 raund = Round_exce()
 print()
 raund.rounds()
+raund.Data_job()
 raund.exception_dial()
