@@ -129,7 +129,7 @@ class Atlas:
         start_row = 0
         with pd.ExcelWriter("testing.xlsx", engine="openpyxl") as writer:
             df = pd.DataFrame(self.res)
-            df.to_excel(writer, sheet_name = 'Pandas_Demo', startrow=start_row, index=True)
+            df.to_excel(writer, sheet_name = 'Result_Sheet', startrow=start_row, index=True)
             writer.save()
 
 class Round_exce(Atlas):
