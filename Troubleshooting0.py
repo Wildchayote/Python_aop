@@ -65,4 +65,26 @@ res = dict(zip(order, order_val))
 print('\nOrder Dictionary: ',str(res))"""
 
 
+a = [{'bash':[[1,2],[3,4,[5,6]]]},{'Deola':[[4,3],[2,1,[0,-1]]]}]
+b = {'Sanni':[[5,6],[7,8,[9,0]]]}
+a.append(b)
+print(a)                # [{'bash': [[1, 2], [3, 4, [5, 6]]]}, {'Deola': [[4, 3], [2, 1, [0, -1]]]}, {'Sanni': [[5, 6], [7, 8, [9, 0]]]}]
 
+for i in range(len(a)):
+    x = a[i]
+print(x)                # {'Sanni': [[5, 6], [7, 8, [9, 0]]]}
+print()
+for j in x:
+    print(j+' | '+str(x[j]))        # Sanni | [[5, 6], [7, 8, [9, 0]]]
+    y = x[j]
+    print()
+for k in range(len(y)):
+    pass
+print(y[1])                         # [7, 8, [9, 0]]
+z = y[1]
+print()
+for m in z:
+    pass
+print(z[2])                         # [9, 0]
+for n in z[2]:
+    print(n)                        # 9\n0
