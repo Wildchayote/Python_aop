@@ -80,9 +80,11 @@ SS.c: Skip slot \n
             print('>>\t'+str(self.SumOfQuantity)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
     def DN(self):
+        self.call = False
         print()
         deliver = input('Deliver now? | ')
         if deliver == 'yes':
+            self.call = True
             InventorySys.Printer(self)
         elif deliver == 'no':
             pass
@@ -103,7 +105,7 @@ SS.c: Skip slot \n
     def Stage(self):
         while True:
             self.say_Stagenum=say_Stagenum=input('Stage number? | ')
-            if say_Stagenum==str(self.Stage_numb):
+            if say_Stagenum==str(self.Stage_numb) and self.call == False:
                 while True:
                     self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
                     print()
@@ -129,6 +131,11 @@ SS.c: Skip slot \n
                         InventorySys.help(self)
             elif say_Stagenum == 'SA.c':
                 pass
+            elif say_Stagenum==str(self.Stage_numb) and self.call == True:
+                print('Container position created!')
+                self.next_assignment=input('Say ready: ')
+                if self.next_assignment == 'ready':
+                    Stack.Aisle(self)
             else: 
                 print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
                 print()
@@ -299,7 +306,6 @@ class Stack:
                         pass
                 except AttributeError:
                     pass
-
                 self.newstacklist
             except AttributeError:
                 self.order_list0 = copy.copy(self.order_list1)
@@ -362,10 +368,11 @@ class Stack:
                             InventorySys.RLP(self)
                             self.status = input(prodd+': ')
 
-                        elif self.status == 'DN.c' and self.tally !=None:
+                        elif self.status == 'DN.c' and self.tally ==None:
+                            self.leftover_list = copy.copy(self.newstacklist)
                             InventorySys.DN(self)
                             self.status = input(prodd+': ')
-                        elif self.status == 'DN.c' and self.tally == None:
+                        elif self.status == 'DN.c' and self.tally != None:
                             print('>>\tDeliver now not allowed!\n')
                             self.status = input(prodd+': ')
 
@@ -399,10 +406,11 @@ class Stack:
                             InventorySys.RLP(self)
                             self.status = input(prodd+': ')
                         
-                        elif self.status == 'DN.c' and self.tally != None:
+                        elif self.status == 'DN.c' and self.tally == None:
+                            self.leftover_list = copy.copy(self.newstacklist)
                             InventorySys.DN(self)
                             self.status = input(prodd+': ')
-                        elif self.status == 'DN.c' and self.tally == None:
+                        elif self.status == 'DN.c' and self.tally != None:
                             print('>>\tDeliver now not allowed!\n')
                             self.status = input(prodd+': ')
 
@@ -441,10 +449,11 @@ class Stack:
         elif say_num == 'RLP.c' and self.tally != None:
             InventorySys.RLP(self)
         
-        elif say_num == 'DN.c' and self.tally != None:
+        elif say_num == 'DN.c' and self.tally == None:
+            self.leftover_list = copy.copy(self.newstacklist)
             InventorySys.DN(self)
 
-        elif say_num == 'DN.c' and self.tally == None:
+        elif say_num == 'DN.c' and self.tally != None:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -478,10 +487,11 @@ class Stack:
         elif say_num == 'RLP.c' and self.tally != None:
             InventorySys.RLP(self)
         
-        elif say_num == 'DN.c' and self.tally != None:
+        elif say_num == 'DN.c' and self.tally == None:
+            self.leftover_list = copy.copy(self.newstacklist)
             InventorySys.DN(self)
 
-        elif say_num == 'DN.c' and self.tally == None:
+        elif say_num == 'DN.c' and self.tally != None:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -588,19 +598,21 @@ class Stack:
                         else:
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             
-            
-
-    def Keg_repeater(self):
-        print()
-        print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
-        self.prodd = copy.copy(self.prod)
-        
+    def list_checker(self):
         if len(self.newstacklist)>0:
             print()
             Stack.Aisle(self)  
         else:
             self.last_pick = None
-            InventorySys.Printer(self) 
+            self.call = False
+            InventorySys.Printer(self)   
+
+    def Keg_repeater(self):
+        print()
+        print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
+        self.prodd = copy.copy(self.prod)
+
+        Stack.list_checker(self) 
 
     def Bottle_ID(self):
         while True:
@@ -614,12 +626,7 @@ class Stack:
                 print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] '+'\nItems on queue: | '+str(self.newstacklist)+'\n')
                 self.prodd = copy.copy(self.prod)
 
-                if len(self.newstacklist)>0:
-                    print()
-                    Stack.Aisle(self)
-                else:
-                    self.last_pick = None
-                    InventorySys.Printer(self)
+                Stack.list_checker(self)
 
             elif self.confirm_item_no == 'yes' and item_no != self.item_barcode:
                 print('>>\tInvalid '+ item_no+'. Try again!\n')
@@ -746,8 +753,8 @@ class Setup:
                 print(' >>\t Unknown Operator. Try again!\n')
 
 setup = Setup()        
-setup.Config()
-setup.Log_timestamp()
+#setup.Config()
+#setup.Log_timestamp()
 
 aop = InventorySys()
 aop.Queuing()
