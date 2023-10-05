@@ -71,20 +71,20 @@ a.append(b)
 print(a)                # [{'bash': [[1, 2], [3, 4, [5, 6]]]}, {'Deola': [[4, 3], [2, 1, [0, -1]]]}, {'Sanni': [[5, 6], [7, 8, [9, 0]]]}]
 
 for i in range(len(a)):
-    x = a[i]
+    #x = a[i]
 print(x)                # {'Sanni': [[5, 6], [7, 8, [9, 0]]]}
 print()
-for j in x:
-    print(j+' | '+str(x[j]))        # Sanni | [[5, 6], [7, 8, [9, 0]]]
-    y = x[j]
+for j in a[i]:
+    print(j+' | '+str(a[i][j]))        # Sanni | [[5, 6], [7, 8, [9, 0]]]
+    #y = x[j]
     print()
-for k in range(len(y)):
+for k in range(len(a[i][j])):
     pass
-print(y[1])                         # [7, 8, [9, 0]]
-z = y[1]
+print(a[i][j][1])                         # [7, 8, [9, 0]]
+#z = y[1]
 print()
-for m in z:
+for m in a[i][j][1]:
     pass
-print(z[2])                         # [9, 0]
-for n in z[2]:
+print(a[i][j][1][2])                         # [9, 0]
+for n in a[i][j][1][2]:
     print(n)                        # 9\n0
