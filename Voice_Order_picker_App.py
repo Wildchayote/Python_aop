@@ -52,7 +52,7 @@ SS.c: Skip slot \n
             else:
                 Stack.Aisle(self)
 
-    def RLP_recur(self):
+    def Repeat_last_pick_check(self):
         aisle_data = self.prod[self.knockoff]
         aisle_data0 = aisle_data[0:11]
         if aisle_data[0:8] == 'Aisle AA':
@@ -67,7 +67,7 @@ SS.c: Skip slot \n
             self.Item_description, str(self.say_qty), str(self.order_dict[self.knockoff]))
             print(rlp)
 
-    def HMM(self):
+    def How_much_more(self):
         self.ListOf_AllQuantity = [self.order_dict[item] for item in self.order_list0]            # ListOfAllQuantity in the order list
         self.SumOfQuantity = sum(self.ListOf_AllQuantity)
 
@@ -79,7 +79,7 @@ SS.c: Skip slot \n
         else:
             print('>>\t'+str(self.SumOfQuantity)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
-    def DN(self):
+    def Deliver_now(self):
         self.call = False
         print()
         deliver = input('Deliver now? | ')
@@ -94,13 +94,13 @@ SS.c: Skip slot \n
             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             deliver = input('Deliver now? ')
 
-    def RLP(self):
+    def Repeat_last_pick(self):
         try:
             self.last_pick
         except AttributeError:
-            InventorySys.RLP_recur(self)
+            InventorySys.Repeat_last_pick_check(self)
         else:
-            InventorySys.RLP_recur(self)
+            InventorySys.Repeat_last_pick_check(self)
         
     def Stage(self):
         while True:
@@ -150,7 +150,7 @@ SS.c: Skip slot \n
                 assert Printer in ['2','3']
             except AssertionError:
                 if Printer == 'RLP.c':
-                    InventorySys.RLP(self)
+                    InventorySys.Repeat_last_pick(self)
                 elif Printer == 'SA.c':
                     pass
                 else:
@@ -351,7 +351,7 @@ class Stack:
                             while True:
                                 Stack.verify_keg(self)
                         elif self.status == 'HMM.c':
-                            InventorySys.HMM(self)
+                            InventorySys.How_much_more(self)
                             print()
                             self.status = input(prodd+': ')
                         elif self.status == 'AS.c':
@@ -365,12 +365,12 @@ class Stack:
                             print('\n>>\tRepeat last pick not allowed!')
                             self.status = input(prodd+': ')
                         elif self.status == 'RLP.c' and self.tally != None:
-                            InventorySys.RLP(self)
+                            InventorySys.Repeat_last_pick(self)
                             self.status = input(prodd+': ')
 
                         elif self.status == 'DN.c' and self.tally ==None:
                             self.leftover_list = copy.copy(self.newstacklist)
-                            InventorySys.DN(self)
+                            InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
                         elif self.status == 'DN.c' and self.tally != None:
                             print('>>\tDeliver now not allowed!\n')
@@ -391,7 +391,7 @@ class Stack:
                             while True:
                                 Stack.verify_bottle(self)
                         elif self.status == 'HMM.c':
-                            InventorySys.HMM(self)
+                            InventorySys.How_much_more(self)
                             print()
                             self.status = input(prodd+': ')
                         elif self.status == 'AS.c':
@@ -403,12 +403,12 @@ class Stack:
                             print('Repeat last pick not allowed!')
                             self.status = input(prodd+': ')
                         elif self.status == 'RLP.c' and self.tally != None:
-                            InventorySys.RLP(self)
+                            InventorySys.Repeat_last_pick(self)
                             self.status = input(prodd+': ')
                         
                         elif self.status == 'DN.c' and self.tally == None:
                             self.leftover_list = copy.copy(self.newstacklist)
-                            InventorySys.DN(self)
+                            InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
                         elif self.status == 'DN.c' and self.tally != None:
                             print('>>\tDeliver now not allowed!\n')
@@ -434,7 +434,7 @@ class Stack:
             Stack.Kegs(self)
         
         elif say_num == 'HMM.c':
-            InventorySys.HMM(self)
+            InventorySys.How_much_more(self)
             print()
         
         elif say_num == 'SA.c':
@@ -447,11 +447,11 @@ class Stack:
             print('Repeat last pick not allowed!')
 
         elif say_num == 'RLP.c' and self.tally != None:
-            InventorySys.RLP(self)
+            InventorySys.Repeat_last_pick(self)
         
         elif say_num == 'DN.c' and self.tally == None:
             self.leftover_list = copy.copy(self.newstacklist)
-            InventorySys.DN(self)
+            InventorySys.Deliver_now(self)
 
         elif say_num == 'DN.c' and self.tally != None:
             print('>>\tDeliver now not allowed!\n')
@@ -472,7 +472,7 @@ class Stack:
             Stack.Bottles(self)
         
         elif say_num == 'HMM.c':
-            InventorySys.HMM(self)
+            InventorySys.How_much_more(self)
             print()
         
         elif say_num == 'SA.c':
@@ -485,11 +485,11 @@ class Stack:
             print('Repeat last pick not allowed!')
 
         elif say_num == 'RLP.c' and self.tally != None:
-            InventorySys.RLP(self)
+            InventorySys.Repeat_last_pick(self)
         
         elif say_num == 'DN.c' and self.tally == None:
             self.leftover_list = copy.copy(self.newstacklist)
-            InventorySys.DN(self)
+            InventorySys.Deliver_now(self)
 
         elif say_num == 'DN.c' and self.tally != None:
             print('>>\tDeliver now not allowed!\n')
@@ -541,7 +541,7 @@ class Stack:
                         elif short_prod == 'no':
                             pass
                         elif short_prod == 'HMM.c':
-                            InventorySys.HMM(self)
+                            InventorySys.How_much_more(self)
                             print()
                         elif short_prod == 'SA.c':
                             self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
@@ -590,7 +590,7 @@ class Stack:
                         elif short_prod=='no':
                             pass
                         elif short_prod == 'HMM.c':
-                            InventorySys.HMM(self)
+                            InventorySys.How_much_more(self)
                             print()
                         elif short_prod == 'SA.c':
                             self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
