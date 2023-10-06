@@ -132,8 +132,8 @@ SS.c: Skip slot \n
             elif say_Stagenum == 'SA.c':
                 pass
             elif say_Stagenum==str(self.Stage_numb) and self.call == True:
-                print('Container position created!')
-                self.next_assignment=input('Say ready: ')
+                print('Position of container created!')
+                self.next_assignment=input('To continue, say ready | ')
                 if self.next_assignment == 'ready':
                     Stack.Aisle(self)
             else: 
