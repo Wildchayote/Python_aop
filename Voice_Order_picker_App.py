@@ -369,7 +369,6 @@ class Stack:
                             self.status = input(prodd+': ')
 
                         elif self.status == 'DN.c' and self.tally ==None:
-                            self.leftover_list = copy.copy(self.newstacklist)
                             InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
                         elif self.status == 'DN.c' and self.tally != None:
@@ -407,7 +406,6 @@ class Stack:
                             self.status = input(prodd+': ')
                         
                         elif self.status == 'DN.c' and self.tally == None:
-                            self.leftover_list = copy.copy(self.newstacklist)
                             InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
                         elif self.status == 'DN.c' and self.tally != None:
@@ -450,7 +448,6 @@ class Stack:
             InventorySys.Repeat_last_pick(self)
         
         elif say_num == 'DN.c' and self.tally == None:
-            self.leftover_list = copy.copy(self.newstacklist)
             InventorySys.Deliver_now(self)
 
         elif say_num == 'DN.c' and self.tally != None:
@@ -488,7 +485,6 @@ class Stack:
             InventorySys.Repeat_last_pick(self)
         
         elif say_num == 'DN.c' and self.tally == None:
-            self.leftover_list = copy.copy(self.newstacklist)
             InventorySys.Deliver_now(self)
 
         elif say_num == 'DN.c' and self.tally != None:
