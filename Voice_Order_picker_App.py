@@ -11,13 +11,11 @@ class InventorySys:
     def Log(self):
         try:
             file1 = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
-            file1.write(str(self.value+ ' : ' +self.timestampStr)+'\n')            # write directly
-            file2 = open('C:\\Users\\labod\\Desktop\\knockoff.xls', "a")
-            file2.write(str(self.data))
+            file1.write(str(self.value)+ ' : ' +str(self.timestampStr)+'\n')            # write directly
             file1.close()
-            file2.close()
         except IOError as e:
             print("I/O error occurred: ", strerror(e.errno))
+            file1 = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
        
     def help(self):
         print('''\n
@@ -101,48 +99,61 @@ SS.c: Skip slot \n
             InventorySys.Repeat_last_pick_check(self)
         else:
             InventorySys.Repeat_last_pick_check(self)
+    
+    def Stage_core_logic(self):
+        self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
+        print()
+        if next_assignment=='ready':
+            self.tally = False
+            del self.newstacklist
+            del self.knockoff
+            InventorySys.Log(self)
+            InventorySys.Queuing(self)
+        elif next_assignment == 'sign off':
+            while True:
+                print('<< <<\tSign off | ', end = '')
+                InventorySys.Log(self)
+                Setup.Log_timestamp(self)
+                sign_on = input('Sign off complete. To sign on again, say ready: ')
+                if sign_on == 'ready':
+                    Setup.Config(self)
+                else:
+                    print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+        else:
+            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+            InventorySys.help(self)
         
     def Stage(self):
         while True:
             self.say_Stagenum=say_Stagenum=input('Stage number? | ')
-            if say_Stagenum==str(self.Stage_numb) and self.call == False:
-                while True:
-                    self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
+            try:
+                self.call
+            except AttributeError:
+                if say_Stagenum==str(self.Stage_numb):
+                    while True:
+                       InventorySys.Stage_core_logic(self)
+                else: 
+                    print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
                     print()
-                    if next_assignment=='ready':
-                        self.tally != None
-                        del self.newstacklist
-                        del self.knockoff
-                        InventorySys.Log(self)
-                        InventorySys.Queuing(self)
-                    elif next_assignment == 'sign off':
-                        while True:
-                            print('<< <<\tSign off | ', end = '')
-                            Setup.Log_timestamp(self)
-                            sign_on = input('Sign off complete. To sign on again, say ready: ')
-                            if sign_on == 'ready':
-                                Setup.Config(self)
-                            else:
-                                print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                    elif next_assignment == 'SA.c':
-                        pass
-                    else:
-                        print(' >>\t I can\'t hear you. Please speak up a bit.\n')
-                        InventorySys.help(self)
-            elif say_Stagenum == 'SA.c':
-                pass
-            elif say_Stagenum==str(self.Stage_numb) and self.call == True:
-                print('Position of container created!')
-                self.next_assignment=input('To continue, say ready | ')
-                if self.next_assignment == 'ready':
-                    Stack.Aisle(self)
-            else: 
-                print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
-                print()
-                pass
+            else:
+                if say_Stagenum==str(self.Stage_numb) and self.call == False:
+                    while True:
+                       InventorySys.Stage_core_logic(self)
+                elif say_Stagenum==str(self.Stage_numb) and self.call == True:
+                    print()
+                    print(' >>\t Position Container Created!')
+                    while True:
+                        self.next_assignment=input('To continue, say ready | ')
+                        if self.next_assignment == 'ready':
+                            Stack.Aisle(self)
+                        else:
+                            print(' >>\t I can\'t hear you. Please speak up a bit.\n')
 
-    def Printer(self):
-        print('Picking complete!')
+                else: 
+                    print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
+                    print()
+    
+    def printer_checker(self):
         while True:
             Printer = input('Printer? | ')
             print()
@@ -180,6 +191,21 @@ SS.c: Skip slot \n
                     pass
                 else: 
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
+
+    def Printer(self):
+        try:
+            self.call
+        except AttributeError:
+            print('Picking complete!')
+            InventorySys.printer_checker(self)
+        else:
+            if self.call == False:
+                print('Picking complete!')
+                InventorySys.printer_checker(self)
+            else:
+                InventorySys.printer_checker(self)
+
+
 
     def Recur(self):
         self.start = start = input('VOICE picking. Directive picking. To receive work, say ready:  ')
@@ -273,16 +299,16 @@ class Stack:
             else:
                 pass
 
-        self.value = value = []
+        self.Value = Value = []
         for item in self.prod:
             if item in self.key:
                 demo0 = (self.prod[item])[0:11]
-                value.append(demo0)
+                Value.append(demo0)
 
         self.order_list0 = []
         for jtem in self.prod:
             if jtem in self.key:
-                new_list = list(map(lambda s: jtem, sorted(value)))
+                new_list = list(map(lambda s: jtem, sorted(Value)))
                 new_list0 = (new_list[0])[0:8]
                 self.order_list0.append(new_list0)
 
@@ -331,11 +357,12 @@ class Stack:
                 try:
                     self.knockoff_val = (self.prod[self.knockoff])[0:8]
                     if self.knockoff_val == self.uprod:
+                        self.tally = False
                         raise Exception
                     else:
-                        pass
+                        self.tally = False
                 except AttributeError:
-                    self.tally = None
+                    self.tally = True
                 except Exception:
                     if self.uprod == 'Aisle AA':
                         Stack.verify_keg(self)                            
@@ -361,17 +388,17 @@ class Stack:
                         elif self.status == 'SA.c':
                             self.status = input(self.uprod+': ')
 
-                        elif self.status == 'RLP.c' and self.tally == None:
+                        elif self.status == 'RLP.c' and self.tally == True:
                             print('\n>>\tRepeat last pick not allowed!')
                             self.status = input(prodd+': ')
-                        elif self.status == 'RLP.c' and self.tally != None:
+                        elif self.status == 'RLP.c' and self.tally == False:
                             InventorySys.Repeat_last_pick(self)
                             self.status = input(prodd+': ')
 
-                        elif self.status == 'DN.c' and self.tally ==None:
+                        elif self.status == 'DN.c' and self.tally == False:
                             InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
-                        elif self.status == 'DN.c' and self.tally != None:
+                        elif self.status == 'DN.c' and self.tally == True:
                             print('>>\tDeliver now not allowed!\n')
                             self.status = input(prodd+': ')
 
@@ -398,17 +425,17 @@ class Stack:
                             self.status = input(self.prodd+': ')
                         elif self.status == 'SA.c':
                             self.status = input(self.uprod+': ')
-                        elif self.status == 'RLP.c' and self.tally == None:
+                        elif self.status == 'RLP.c' and self.tally == True:
                             print('Repeat last pick not allowed!')
                             self.status = input(prodd+': ')
-                        elif self.status == 'RLP.c' and self.tally != None:
+                        elif self.status == 'RLP.c' and self.tally == False:
                             InventorySys.Repeat_last_pick(self)
                             self.status = input(prodd+': ')
                         
-                        elif self.status == 'DN.c' and self.tally == None:
+                        elif self.status == 'DN.c' and self.tally == False:
                             InventorySys.Deliver_now(self)
                             self.status = input(prodd+': ')
-                        elif self.status == 'DN.c' and self.tally != None:
+                        elif self.status == 'DN.c' and self.tally == True:
                             print('>>\tDeliver now not allowed!\n')
                             self.status = input(prodd+': ')
 
@@ -441,16 +468,16 @@ class Stack:
         elif say_num == 'AS.c':
             Stack.Aisle_summary(self)
 
-        elif say_num == 'RLP.c' and self.tally == None:
+        elif say_num == 'RLP.c' and self.tally == True:
             print('Repeat last pick not allowed!')
 
-        elif say_num == 'RLP.c' and self.tally != None:
+        elif say_num == 'RLP.c' and self.tally == False:
             InventorySys.Repeat_last_pick(self)
         
-        elif say_num == 'DN.c' and self.tally == None:
+        elif say_num == 'DN.c' and self.tally == False:
             InventorySys.Deliver_now(self)
 
-        elif say_num == 'DN.c' and self.tally != None:
+        elif say_num == 'DN.c' and self.tally == True:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -478,16 +505,16 @@ class Stack:
         elif say_num == 'AS.c':
             Stack.Aisle_summary(self)
 
-        elif say_num == 'RLP.c' and self.tally == None:
+        elif say_num == 'RLP.c' and self.tally == True:
             print('Repeat last pick not allowed!')
 
-        elif say_num == 'RLP.c' and self.tally != None:
+        elif say_num == 'RLP.c' and self.tally == False:
             InventorySys.Repeat_last_pick(self)
         
-        elif say_num == 'DN.c' and self.tally == None:
+        elif say_num == 'DN.c' and self.tally == False:
             InventorySys.Deliver_now(self)
 
-        elif say_num == 'DN.c' and self.tally != None:
+        elif say_num == 'DN.c' and self.tally == True:
             print('>>\tDeliver now not allowed!\n')
 
         elif say_num == 'SS.c':
@@ -600,7 +627,6 @@ class Stack:
             Stack.Aisle(self)  
         else:
             self.last_pick = None
-            self.call = False
             InventorySys.Printer(self)   
 
     def Keg_repeater(self):
@@ -663,7 +689,7 @@ class Stack:
 
         counter = 0
         new_value = []
-        for item in self.value:
+        for item in self.Value:
             if item.startswith(aisle):
                 new_value.append(item)
                 counter += 1                                                # counter of inventories on the same aisle.
@@ -727,9 +753,9 @@ class Stack:
 
 class Setup:
     def Log_timestamp(self):
-        timestampStr = datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")
-        print(self.value+ ' :\t' +timestampStr)
-        InventorySys.Log(self)
+        self.timestampStr = datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")
+        print(self.value+ ' :\t' +self.timestampStr)
+        #InventorySys.Log(self)
         #Setup.Config(self)
 
     def Config(self):
@@ -749,8 +775,8 @@ class Setup:
                 print(' >>\t Unknown Operator. Try again!\n')
 
 setup = Setup()        
-#setup.Config()
-#setup.Log_timestamp()
+setup.Config()
+setup.Log_timestamp()
 
 aop = InventorySys()
 aop.Queuing()
