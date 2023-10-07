@@ -15,7 +15,6 @@ class InventorySys:
             file1.close()
         except IOError as e:
             print("I/O error occurred: ", strerror(e.errno))
-            file1 = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
        
     def help(self):
         print('''\n
