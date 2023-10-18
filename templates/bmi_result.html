@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{%block content%}
+<h1 style="color: rgba(31, 3, 3, 0.853); font-size: 16px; ">{{ bmi_record.name }}</h1>
+    <p style="font-size: 18px;">Date: {{ bmi_record.date }}</p>
+    <li style="font-size: 18px;"><b>Height:</b> {{ bmi_record.height }} m</li>
+    <li style="font-size: 18px;"><b>Weight:</b> {{ bmi_record.weight }} kg</li>
+    
+    <h1 style="color: rgba(13, 2, 44, 0.916); font-size: 20px;">Your BMI: {{ bmi|floatformat:2 }}</h1>
+
+    {% if bmi < 18.5 %}
+    <p><b>Remark: </b> {{bmi_record.name}}, you are within the underweight range (Below 18.5).</p>
+    {% elif bmi >= 18.5 and bmi <= 24.9 %}
+    <p><b>Remark: </b> You are within the healthy range (18.5 - 24.9).</p>
+    {% elif bmi >= 25.0 and bmi <= 29.9 %}
+    <p><b>Remark: </b> You are within the overweight range (25.0 - 29.9).</p>
+    {% elif bmi >= 30.0 %}
+    <p><b>Remark: </b> {{bmi_record.name}}, you are within the obese range (30 and above).</p>
+    {% endif %}
+
+    <!-- <p>Saved BMI: {{ bmi_result.BMI|floatformat:2 }}</p> -->
+{%endblock%}

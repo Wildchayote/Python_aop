@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Supply_Country_Page{% endblock %}
+{%block content%}
+<h1 style="color: rgb(33, 2, 70); font-size: 16px;">States and Capital</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="SEARCH">
+</form>
+{%endblock content%}
