@@ -18,7 +18,7 @@ def country_form(request):
 
 def get_capital(request,pk):
     nation_record = Nation.objects.get(pk=pk)
-    with open('C:\\Users\\labod\\Desktop\\dictionary.txt', 'r') as file:
+    with open('dictionary.txt', 'r') as file:
         world_atlas = json.load(file)                                       # dictionary
     nation = nation_record.nation.lower()
     
