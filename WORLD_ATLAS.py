@@ -9,7 +9,7 @@ print()
 user=input("[prompt:]  Enter username: ")
 print()
 
-with open('C:\\Users\\labod\\Desktop\\dictionary.txt', 'r') as file:
+with open('dictionary.txt', 'r') as file:
     world_atlas = json.load(file)
 
 while True:
