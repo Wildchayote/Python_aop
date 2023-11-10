@@ -269,26 +269,10 @@ class Stack:
     def Aisle(self):
         with open('prod.txt', 'r') as file:
             self.prod = json.load(file)
-        # self.prod ={
-        #             'CA11': 'Aisle AA-07 Carling (CA11) | 11 gal keg',         'CA22': 'Aisle AA-11 Carling (CA22) | 22 gal keg',    
-        #             'FO11': 'Aisle AA-01 Fosters (FO11) | 11 gal keg',         'FO22': 'Aisle AA-06 Fosters (FO22) | 22 gal keg',      
-        #             'CO11': 'Aisle AA-05 Coors Lite (CO11) | 11 gal keg',      'CO22': 'Aisle AA-02 Coors Lite (CO22) | 22 gal keg',    
-        #             'JS11': 'Aisle AA-12 John Smiths (JS11) | 11 gal keg',     'JS22': 'Aisle AA-08 John Smiths (JS22) | 22 gal keg',    
-        #             'MA11': 'Aisle AA-09 Madri Lager (MA11) | 11 gal',         'GD11': 'Aisle AA-10 Guiness Draughts (GS11) | 11 gal keg',
-        #             'SA11': 'Aisle AA-13 Stella Attoires (SA11) | 10.5 gal',   'TS11': 'Aisle AA-14 Trophy Special (TS11) | 11 gal keg',
-        #             'TB09': 'Aisle AA-16 Theakson Bitters (TB09) | 09 gal keg','PN11': 'Aisle AA-04 Peroni 4.6 (PN11) | 11 gal keg',
-        #             'BI11': 'Aisle AA-15 Birra Moretti (BI11) | 11 gal keg',
 
-        #             'AB75': 'Aisle BE-79-A-03 7683 01 Absolut Vodka (AB40) | 40% alc', 
-        #             'SM75': 'Aisle BE-47-A-01 1118 01 Smirnoff Vodka (SM37) | 38% alc', 
-        #             'PE7L': 'Aisle BL-50-A-02 9785 12 Britvic Pepsi Cola Max | 7lt Bib', 
-        #             'CE35': 'Aisle BA-90-A-03 3248 03 Corona Extra NBA (CE35) | 4.5% alc',
-        #             'DP30': 'Aisle BA-04-A-02 0530 02 Desperados Tequila Beer (DP04) | 4% alc',
-        #             'FG1L': 'Aisle BB-86-A-16 3005 10 Famous Grouse Whisky | 40.5% alc'
-        #             }
-
-        self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15',
-                                      '16','17','18','19','20','21','22','23','24','25','26','27','28','29','30']
+        self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10',
+                                      '11','12','13','14','15','16','17','18','19','20',
+                                      '21','22','23','24','25','26','27','28','29','30']
         self.Stage_numb = choice(Stage_num)
 
         for item in self.key:
