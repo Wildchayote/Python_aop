@@ -1,18 +1,23 @@
 from random import choice
 from datetime import datetime
-import copy
-import math
+import copy, math, json
 from os import strerror
 
 
 
 class InventorySys:
 
+    def Reset_sequence (self):                                      #Resetting; clearing/resetting data/parameters, logging data in prep for a next assignment
+        self.tally = False
+        del self.newstacklist                                       #Deleting work queue
+        del self.knockoff
+        InventorySys.Log(self)
+
     def Log(self):
         try:
-            file1 = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
-            file1.write(str(self.value)+ ' : ' +str(self.timestampStr)+'\n')            # write directly
-            file1.close()
+            Login = open('C:\\Users\\labod\\Desktop\\pick_log.xls', "a")
+            Login.write(str(self.value)+ ' : ' +str(self.timestampStr)+'\n')            # write directly
+            Login.close()
         except IOError as e:
             print("I/O error occurred: ", strerror(e.errno))
        
@@ -103,15 +108,14 @@ SS.c: Skip slot \n
         self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
         print()
         if next_assignment=='ready':
-            self.tally = False
-            del self.newstacklist
-            del self.knockoff
-            InventorySys.Log(self)
+            InventorySys.Reset_sequence(self)                         #Resetting; clearing/resetting data/parameters, logging data in prep for a next assignment
+            
             InventorySys.Queuing(self)
         elif next_assignment == 'sign off':
             while True:
                 print('<< <<\tSign off | ', end = '')
-                InventorySys.Log(self)
+                InventorySys.Reset_sequence(self)             
+
                 Setup.Log_timestamp(self)
                 sign_on = input('Sign off complete. To sign on again, say ready: ')
                 if sign_on == 'ready':
@@ -232,10 +236,10 @@ SS.c: Skip slot \n
     def Queuing(self):
         print()
         
-        self.stacklist=input('Load Assignment: | ')
-        self.self_collect =  input('Self Collect? | ')
+        self.stacklist=input('Load Assignment: | ')                         #Loading/queuing order to be picked
+        self.self_collect =  input('Self Collect? | ').lower()
         print()
-        self.stacklist = self.stacklist.split()
+        self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follows
         
         self.key = key = []
         self.quanti = quanti = []
@@ -267,12 +271,11 @@ SS.c: Skip slot \n
 
 class Stack:
     def Aisle(self):
-        with open('prod.txt', 'r') as file:
+        with open('path/to/prod.txt', 'r') as file:           #Inventory data
             self.prod = json.load(file)
 
-        self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10',
-                                      '11','12','13','14','15','16','17','18','19','20',
-                                      '21','22','23','24','25','26','27','28','29','30']
+        self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15',
+                                      '16','17','18','19','20','21','22','23','24','25','26','27','28','29','30']
         self.Stage_numb = choice(Stage_num)
 
         for item in self.key:
@@ -611,6 +614,7 @@ class Stack:
             print()
             Stack.Aisle(self)  
         else:
+            self.call = False
             self.last_pick = None
             InventorySys.Printer(self)   
 
@@ -744,14 +748,14 @@ class Setup:
         #Setup.Config(self)
 
     def Config(self):
-        self.match = match = {'Bashir': 'Bashir Sanni', 'Damen': 'Damen Butters', 'Chandler': 'Chandler Morrisons', 
+        self.operators = operators = {'Bashir': 'Bashir Sanni', 'Damen': 'Damen Butters', 'Chandler': 'Chandler Morrisons', 
                             'Charlie': 'Charlie Dyer', 'Sean': 'Sean Turner', 'Josh': 'Josh Darley'}
         while True:
             print()
             self.key = key = input('Selecting Operator: | ')
-            if key in match:
-                self.value = match[key]
-                print('Current Operator is ' +match[key] +'.\n')
+            if key in operators:
+                self.value = operators[key]
+                print('Current Operator is ' +operators[key] +'.\n')
                 print('>> >>\tSign on | ', end = '')
                 Setup.Log_timestamp(self)
                 print()
