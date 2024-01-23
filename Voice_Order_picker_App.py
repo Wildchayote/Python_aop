@@ -144,7 +144,7 @@ SS.c: Skip slot \n
                        InventorySys.Stage_core_logic(self)
                 elif say_Stagenum==str(self.Stage_numb) and self.call == True:
                     print()
-                    print(' >>\t Position Container Created!')
+                    print(' >>\t Position of container created!')
                     while True:
                         self.next_assignment=input('To continue, say ready | ')
                         if self.next_assignment == 'ready':
@@ -271,7 +271,8 @@ SS.c: Skip slot \n
 
 class Stack:
     def Aisle(self):
-        with open('path/to/prod.txt', 'r') as file:           #Inventory data
+        # with open('path/to/prod.txt', 'r') as file:           #Inventory data
+        with open('C:\\Users\\labod\\Desktop\\wip\\self.prod.txt', 'r') as file:           #Inventory data
             self.prod = json.load(file)
 
         self.Stage_num = Stage_num = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15',
