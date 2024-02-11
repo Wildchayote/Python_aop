@@ -235,12 +235,20 @@ SS.c: Skip slot \n
 
     def Queuing(self):
         print()
-        
-        self.stacklist=input('Load Assignment: | ')                         #Loading/queuing order to be picked
-        self.self_collect =  input('Self Collect? | ').lower()
-        print()
-        self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follows
-        
+        try:
+            if len(Stack.short_item_list1)==0:
+                raise Exception
+            else:
+                pass
+        except Exception:
+            self.stacklist=input('Load Assignment: | ')                         #Loading/queuing order to be picked
+            self.self_collect =  input('Self Collect? | ').lower()
+            print()
+            self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follows
+        else:
+            self.stacklist = " ".join(str(element) for element in Stack.short_item_list1)
+            self.stacklist = self.stacklist.split()
+
         self.key = key = []
         self.quanti = quanti = []
         for item in self.stacklist:
@@ -270,7 +278,6 @@ SS.c: Skip slot \n
 
 
 class Stack:
-    short_item_list = []
     short_item_list1 =[]
     def Aisle(self):
         
