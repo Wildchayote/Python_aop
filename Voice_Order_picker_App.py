@@ -11,7 +11,7 @@ class InventorySys:
         self.tally = False
         del self.newstacklist                                       #Deleting work queue
         del self.knockoff
-        InventorySys.Log(self)
+        #InventorySys.Log(self)
 
     def Log(self):
         try:
@@ -109,8 +109,8 @@ SS.c: Skip slot \n
         print()
         if next_assignment=='ready':
             InventorySys.Reset_sequence(self)                         #Resetting; clearing/resetting data/parameters, logging data in prep for a next assignment
-            
             InventorySys.Queuing(self)
+
         elif next_assignment == 'sign off':
             while True:
                 print('<< <<\tSign off | ', end = '')
@@ -270,7 +270,10 @@ SS.c: Skip slot \n
 
 
 class Stack:
+    short_item_list = []
+    short_item_list1 =[]
     def Aisle(self):
+        
         # with open('path/to/prod.txt', 'r') as file:           #Inventory data
         with open('C:\\Users\\labod\\Desktop\\wip\\self.prod.txt', 'r') as file:           #Inventory data
             self.prod = json.load(file)
@@ -512,8 +515,9 @@ class Stack:
         else:
             print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
 
-
+    
     def Kegs(self):
+        
         self.knockoff = knockoff = self.knockoff
         if knockoff in self.order_dict:
             self.quantity = self.order_dict[knockoff]
@@ -547,6 +551,11 @@ class Stack:
                         self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
                                                         '.\n\t Is this a short product? | ')
                         if short_prod=='yes':
+                            short_qty = int(self.quantity) - int(self.say_qty)
+                            self.short_item = self.knockoff +'-'+str(short_qty)
+                            Stack.short_item_list1.append(self.short_item)
+                            print(Stack.short_item_list1)
+                            
                             Stack.Keg_repeater(self)
                             InventorySys.Printer(self)
                             break
@@ -611,6 +620,7 @@ class Stack:
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             
     def list_checker(self):
+        
         if len(self.newstacklist)>0:
             print()
             Stack.Aisle(self)  
@@ -620,6 +630,7 @@ class Stack:
             InventorySys.Printer(self)   
 
     def Keg_repeater(self):
+    
         print()
         print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
         self.prodd = copy.copy(self.prod)
@@ -765,8 +776,8 @@ class Setup:
                 print(' >>\t Unknown Operator. Try again!\n')
 
 setup = Setup()        
-setup.Config()
-setup.Log_timestamp()
+#setup.Config()
+#setup.Log_timestamp()
 
 aop = InventorySys()
 aop.Queuing()
