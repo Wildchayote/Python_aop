@@ -240,6 +240,7 @@ SS.c: Skip slot \n
                 raise Exception
             else:
                 pass
+                #Stack.short_item_list.pop()
         except Exception:
             self.stacklist=input('Load Assignment: | ')                         #Loading/queuing order to be picked
             self.self_collect =  input('Self Collect? | ').lower()
@@ -755,9 +756,9 @@ class Stack:
 
 
     def pop(self):
-        order = self.order_list0[0]
-        del self.order_list0[0]
-        return order
+        order = self.order_list0.pop(0)
+        short = Stack.short_item_list1.pop(0)
+        return order, short
 
 class Setup:
     def Log_timestamp(self):
