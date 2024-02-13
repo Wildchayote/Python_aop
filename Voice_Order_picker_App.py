@@ -82,11 +82,11 @@ SS.c: Skip slot \n
             print('>>\t'+str(self.SumOfQuantity)+ ' item in '+ str(len(self.order_list0))+ ' location.')
     
     def Deliver_now(self):
-        self.call = False
+        self.call_to_DN = False
         print()
         deliver = input('Deliver now? | ')
         if deliver == 'yes':
-            self.call = True
+            self.call_to_DN = True
             InventorySys.Printer(self)
         elif deliver == 'no':
             pass
@@ -106,6 +106,7 @@ SS.c: Skip slot \n
     
     def Stage_core_logic(self):
         self.next_assignment=next_assignment=input('Assignment complete! For next assignment, say ready: ')
+        self.short_item_stage_num = copy.copy(self.Stage_numb)
         print()
         if next_assignment=='ready':
             InventorySys.Reset_sequence(self)                         #Resetting; clearing/resetting data/parameters, logging data in prep for a next assignment
@@ -130,7 +131,7 @@ SS.c: Skip slot \n
         while True:
             self.say_Stagenum=say_Stagenum=input('Stage number? | ')
             try:
-                self.call
+                self.call_to_DN
             except AttributeError:
                 if say_Stagenum==str(self.Stage_numb):
                     while True:
@@ -139,10 +140,10 @@ SS.c: Skip slot \n
                     print(' >>\t Wrong '+str(say_Stagenum)+ ', Try again! Deliver to Stage 0'+str(self.Stage_numb))
                     print()
             else:
-                if say_Stagenum==str(self.Stage_numb) and self.call == False:
+                if say_Stagenum==str(self.Stage_numb) and self.call_to_DN == False:
                     while True:
                        InventorySys.Stage_core_logic(self)
-                elif say_Stagenum==str(self.Stage_numb) and self.call == True:
+                elif say_Stagenum==str(self.Stage_numb) and self.call_to_DN == True:
                     print()
                     print(' >>\t Position of container created!')
                     while True:
@@ -169,40 +170,47 @@ SS.c: Skip slot \n
                     pass
                 else:
                     while True:
-                        select_Printer = input(Printer+'? TIMELESS '+Printer+'? correct? | ')
-                        if select_Printer == 'yes':
+                        confirm_printer = input(Printer+'? TIMELESS '+Printer+'? correct? | ')
+                        if confirm_printer == 'yes':
                             print(' >>\t TIMELESS '+Printer+' not found. Try again!')
-                        elif select_Printer == 'SA.c':
+                        elif confirm_printer == 'SA.c':
                             pass
-                        elif select_Printer == 'no':
+                        elif confirm_printer == 'no':
                             InventorySys.Printer(self)
                         else: 
                             print(' >>\t I can\'t hear you. Please speak up a bit.\n')
             else:
                 self.Stage_numb = Stage_numb = self.Stage_numb
-                select_Printer = input(Printer+'? TIMELESS '+Printer+'? correct? | ')
-                if select_Printer == 'yes' and self.self_collect == 'no':
+                confirm_printer = input(Printer+'? TIMELESS '+Printer+'? correct? | ')
+                if confirm_printer == 'yes' and self.self_collect == 'no' and self.short_item_processed == False:
                     print('Deliver to Stage 0'+str(Stage_numb)+ '\n')
                     InventorySys.Stage(self)
-                elif select_Printer == 'yes' and self.self_collect == 'yes':
+
+                elif confirm_printer == 'yes' and self.self_collect == 'no' and self.short_item_processed == True:
+                    self.Stage_numb = self.short_item_stage_num
+                    print('Deliver to Stage 0'+str(self.Stage_numb)+ '\n')
+                    InventorySys.Stage(self)
+
+                elif confirm_printer == 'yes' and self.self_collect == 'yes':
                     self.Stage_numb = 10
                     print('Deliver to Stage 0'+str(self.Stage_numb)+ '\n')
                     InventorySys.Stage(self)
-                elif select_Printer == 'no':
+
+                elif confirm_printer == 'no':
                     pass
-                elif select_Printer == 'SA.c':
+                elif confirm_printer == 'SA.c':
                     pass
                 else: 
                     print(' >>\t I can\'t hear you. Please speak up a bit.\n')
 
     def Printer(self):
         try:
-            self.call
+            self.call_to_DN
         except AttributeError:
             print('Picking complete!')
             InventorySys.printer_checker(self)
         else:
-            if self.call == False:
+            if self.call_to_DN == False:
                 print('Picking complete!')
                 InventorySys.printer_checker(self)
             else:
@@ -234,6 +242,7 @@ SS.c: Skip slot \n
                     pass
 
     def Queuing(self):
+        self.short_item_processed = False
         print()
         try:
             if len(Stack.short_item_list1)==0:
@@ -247,8 +256,9 @@ SS.c: Skip slot \n
             self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follows
         else:
             self.stacklist = " ".join(str(element) for element in Stack.short_item_list1)
-            self.stacklist = self.stacklist.split()
             Stack.short_item_list1.clear()
+            self.short_item_processed = True
+            self.stacklist = self.stacklist.split()
 
         self.key = key = []
         self.quanti = quanti = []
@@ -484,7 +494,7 @@ class Stack:
             Stack.skip_slot(self)
             Stack.Aisle(self)
         else:
-            print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
+            print(' >>\t Wrong check digit '+str(self.say_num)+'. Try again!')
 
         
     def Dial0_bottles(self):
@@ -521,7 +531,7 @@ class Stack:
             Stack.skip_slot(self)
             Stack.Aisle(self)
         else:
-            print(' >>\t Wrong check digit '+str(self.aisle_num)+'. Try again!')
+            print(' >>\t Wrong check digit '+str(self.say_num)+'. Try again!')
 
     
     def Kegs(self):
@@ -609,10 +619,15 @@ class Stack:
                         print(self.print_err)
                         print()
                     else:
-                        self.short_prod=short_prod=input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
+                        self.short_prod = short_prod = input(' >>\tYou said '+str(self.say_qty)+', I asked for '+str(self.quantity)+
                                                         '.\n\t Is this a short product? | ')
                         print()
                         if short_prod=='yes':
+                            short_qty = int(self.quantity) - int(self.say_qty)
+                            self.short_item = self.knockoff +'-'+str(short_qty)
+                            Stack.short_item_list1.append(self.short_item)
+                            print(Stack.short_item_list1)
+
                             Stack.Bottle_ID(self)
                             InventorySys.Printer(self)
                             break
@@ -633,7 +648,7 @@ class Stack:
             print()
             Stack.Aisle(self)  
         else:
-            self.call = False
+            self.call_to_DN = False
             self.last_pick = None
             InventorySys.Printer(self)   
 
@@ -650,7 +665,7 @@ class Stack:
             self.item_barcode = item_barcode = self.prod
             self.item_barcode = (item_barcode[self.knockoff])[17:21]
             self.item_no = item_no = input('Item number | '+self.item_barcode+ ': | ')
-            self.confirm_item_no = input(str(item_no)+ ' corect? | ')
+            self.confirm_item_no = input(str(item_no)+ ' correct? | ')
             print()
             
             if self.confirm_item_no == 'yes' and item_no == self.item_barcode:
@@ -756,17 +771,8 @@ class Stack:
 
 
     def pop(self):
-        try:
-            order = self.order_list0.pop(0)
-        except:
-            try:
-                short = Stack.short_item_list1.pop(0)
-            except:
-                print('>>\tOrder lists are empty. Try again!')
-            else:
-                return short
-        else:
-            return order
+        popped_item = self.order_list0.pop(0)
+        return popped_item
 
 class Setup:
     def Log_timestamp(self):
