@@ -248,6 +248,7 @@ SS.c: Skip slot \n
         else:
             self.stacklist = " ".join(str(element) for element in Stack.short_item_list1)
             self.stacklist = self.stacklist.split()
+            Stack.short_item_list1.clear()
 
         self.key = key = []
         self.quanti = quanti = []
@@ -756,16 +757,16 @@ class Stack:
 
     def pop(self):
         try:
-            short = Stack.short_item_list1.pop(0)
+            order = self.order_list0.pop(0)
         except:
             try:
-                order = self.order_list0.pop(0)
+                short = Stack.short_item_list1.pop(0)
             except:
                 print('>>\tOrder lists are empty. Try again!')
             else:
-                return order
+                return short
         else:
-            return short
+            return order
 
 class Setup:
     def Log_timestamp(self):
