@@ -783,7 +783,7 @@ class Setup:
 
     def Config(self):
         self.operators = operators = {'Bashir': 'Bashir Sanni', 'Damen': 'Damen Butters', 'Chandler': 'Chandler Morrisons', 
-                            'Charlie': 'Charlie Dyer', 'Sean': 'Sean Turner', 'Josh': 'Josh Darley'}
+                            'Ray': 'Raymond Dierick', 'Sean': 'Sean Turner', 'Josh': 'Josh Darley'}
         while True:
             print()
             self.key = key = input('Selecting Operator: | ')
