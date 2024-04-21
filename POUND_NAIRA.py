@@ -36,8 +36,8 @@ def PoundException():
         else:
             quit()
             
-one_Npound = 1236.00
-one_Pnaira = 1198.85
+one_Npound = 730.00
+one_Pnaira = 770.85
 
 
 while True:
