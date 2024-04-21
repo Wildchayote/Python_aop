@@ -245,7 +245,7 @@ SS.c: Skip slot \n
         self.short_item_processed = False
         print()
         try:
-            if len(Stack.short_item_list1)==0:
+            if len(Stack.short_item_list1)==0:                                  #checking if list is empty
                 raise Exception
             else:
                 pass
@@ -253,7 +253,7 @@ SS.c: Skip slot \n
             self.stacklist=input('Load Assignment: | ')                         #Loading/queuing order to be picked
             self.self_collect =  input('Self Collect? | ').lower()
             print()
-            self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follows
+            self.stacklist = self.stacklist.split()                             #Data manipulation in the steps that follow
         else:
             self.stacklist = " ".join(str(element) for element in Stack.short_item_list1)
             Stack.short_item_list1.clear()
@@ -655,7 +655,7 @@ class Stack:
     def Keg_repeater(self):
     
         print()
-        print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
+        print('Items picked: | '+str(self.say_qty)+' of '+str(self.quantity)+' ['+str(self.knockoff)+'] ' +'\nItems on queue: | '+str(self.newstacklist)+'\n')
         self.prodd = copy.copy(self.prod)
 
         Stack.list_checker(self) 
@@ -669,7 +669,7 @@ class Stack:
             print()
             
             if self.confirm_item_no == 'yes' and item_no == self.item_barcode:
-                print('Items picked: | '+str(self.say_qty)+' ['+str(self.knockoff)+'] '+'\nItems on queue: | '+str(self.newstacklist)+'\n')
+                print('Items picked: | '+str(self.say_qty)+' of '+str(self.quantity)+' ['+str(self.knockoff)+'] '+'\nItems on queue: | '+str(self.newstacklist)+'\n')
                 self.prodd = copy.copy(self.prod)
 
                 Stack.list_checker(self)
