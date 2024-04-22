@@ -36,17 +36,17 @@ def PoundException():
         else:
             quit()
             
-one_Npound = 1236.00
-one_Pnaira = 1198.85
+one_Npound = 1550.00
+one_Pnaira = 1450.25
 
 
 while True:
     currency = input(" Enter currency | ")
     if currency == "£":
-        print(' £1 = N1236.00')
+        print(' £1 = N1550.00')
         PoundException()
     elif currency == "N":
-        print(' £1 = N1198.85')
+        print(' £1 = N1450.25')
         NairaException()
     else:
         print(">> Error: Unsupported currency. Try again!")
