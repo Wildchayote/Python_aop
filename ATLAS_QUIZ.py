@@ -1,5 +1,5 @@
 from random import random, choice
-import time, openpyxl, json
+import time, json
 #import pandas as pd
 
 print()
