@@ -28,12 +28,12 @@ class Atlas:
         if answer == self.world_atlas[self.country]:
             print(">>\tCorrect!")
             Atlas.player1 += 1
-            time.sleep(1)
+            #time.sleep(1)
         else:
             print(">>\tWrong!:", end = '')
             print("\tThe capital of",self.country.title(), "is", self.world_atlas[self.country].title())
             Atlas.player1+=0
-            time.sleep(1)
+            #time.sleep(1)
 
     def exception_dial(self):
         print()
@@ -66,7 +66,7 @@ class Atlas:
 
             print()
             print('*** Loading result...')
-            time.sleep(2)
+            #time.sleep(2)
             print(Atlas.name1+", you scored ",Atlas.player1)
             print(Atlas.name2+", you scored ",Atlas.player2)
             
@@ -74,13 +74,13 @@ class Atlas:
             for i in Atlas.player:
                 score = i / questions
                 if i < questions*.5:
-                    time.sleep(2)
+                    #time.sleep(2)
                     print("\nYou scored",round(score*100,2),"%")
                     print("You failed the quiz!...relaunch app to try again!\n")
                     Atlas.play_again(self)
                 else:
                     i>=questions*.5
-                    time.sleep(2)
+                    #time.sleep(2)
                     self.result = round(score*100,2)
                     print("\nCongratulation!  You passed the quiz!...",self.result,"%\n")
                     Atlas.play_again(self)

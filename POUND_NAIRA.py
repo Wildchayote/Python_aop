@@ -35,7 +35,6 @@ def PoundException():
             pass
         else:
             quit()
-            
 one_Npound = 1550.00
 one_Pnaira = 1450.25
 

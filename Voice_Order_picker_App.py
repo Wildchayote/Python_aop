@@ -215,8 +215,7 @@ SS.c: Skip slot \n
                 InventorySys.printer_checker(self)
             else:
                 InventorySys.printer_checker(self)
-
-
+                
 
     def Recur(self):
         self.start = start = input('VOICE picking. Directive picking. To receive work, say ready:  ')
